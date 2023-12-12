@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34321.82
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarcraftGearPlanner", "WarcraftGearPlanner\WarcraftGearPlanner.csproj", "{02B8FAAE-DAB7-470C-B61A-383F4213A1DB}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "WarcraftGearPlanner.Client", "WarcraftGearPlanner.Client\WarcraftGearPlanner.Client.esproj", "{26008E4D-1433-443A-A98B-C22110A4FB7C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarcraftGearPlanner.Server", "WarcraftGearPlanner.Server\WarcraftGearPlanner.Server.csproj", "{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{02B8FAAE-DAB7-470C-B61A-383F4213A1DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02B8FAAE-DAB7-470C-B61A-383F4213A1DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{02B8FAAE-DAB7-470C-B61A-383F4213A1DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{02B8FAAE-DAB7-470C-B61A-383F4213A1DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26008E4D-1433-443A-A98B-C22110A4FB7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26008E4D-1433-443A-A98B-C22110A4FB7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26008E4D-1433-443A-A98B-C22110A4FB7C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{26008E4D-1433-443A-A98B-C22110A4FB7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26008E4D-1433-443A-A98B-C22110A4FB7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26008E4D-1433-443A-A98B-C22110A4FB7C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
