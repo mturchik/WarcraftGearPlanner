@@ -3,6 +3,7 @@ using WarcraftGearPlanner.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient();
+builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IBattleNetService, BattleNetService>();
 
 builder.Services.AddControllers();

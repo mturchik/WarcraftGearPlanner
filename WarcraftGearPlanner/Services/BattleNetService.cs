@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Caching.Memory;
 using System.Net.Http.Headers;
 using System.Text;
 using WarcraftGearPlanner.Extensions;
@@ -7,10 +7,11 @@ using WarcraftGearPlanner.Models.Response;
 
 namespace WarcraftGearPlanner.Services;
 
-public class BattleNetService(IHttpClientFactory httpClientFactory, IConfiguration configuration) : IBattleNetService
+public class BattleNetService(IHttpClientFactory httpClientFactory, IConfiguration configuration, IMemoryCache memoryCache) : IBattleNetService
 {
 	private readonly HttpClient _httpClient = httpClientFactory.CreateClient("BattleNetService");
 	private readonly IConfiguration _configuration = configuration;
+	private readonly IMemoryCache _memoryCache = memoryCache;
 	private readonly string Base = "https://us.api.blizzard.com";
 
 	private enum Namespace
@@ -20,25 +21,37 @@ public class BattleNetService(IHttpClientFactory httpClientFactory, IConfigurati
 		Profile
 	}
 
-	private TokenResponse? Token { get; set; }
-
 	#region Utility
 
 	private async Task SetAuthorizeToken(HttpRequestMessage requestMessage)
 	{
-		if (Token?.ExpiresOn is null || Token.ExpiresOn <= DateTime.UtcNow)
-		{
-			var tokenRequest = CreateTokenRequest();
-			var token = await _httpClient.Send<TokenResponse>(tokenRequest);
-			if (token is null) return;
+		var accessToken = await GetAuthorizationToken();
+		requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+		requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+	}
 
-			// Set expires timestamp to keep an active OAuth token
-			token.ExpiresOn = DateTime.UtcNow.AddSeconds(token.Expires_In).Subtract(TimeSpan.FromHours(4));
-			Token = token;
+	private async Task<string?> GetAuthorizationToken()
+	{
+		var token = await _memoryCache.GetOrCreateAsync("BattleNetToken", entry => SendTokenRequest());
+
+		if (token?.ExpiresOn is null || token.ExpiresOn <= DateTime.UtcNow)
+		{
+			token = await SendTokenRequest();
+			if (token != null) _memoryCache.Set("BattleNetToken", token);
 		}
 
-		requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-		requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Token.Access_Token);
+		return token?.Access_Token;
+	}
+
+	private async Task<TokenResponse?> SendTokenRequest()
+	{
+		var tokenRequest = CreateTokenRequest();
+		var token = await _httpClient.Send<TokenResponse>(tokenRequest);
+		if (token is null) return null;
+
+		// Set expires timestamp to keep an active OAuth token
+		token.ExpiresOn = DateTime.UtcNow.AddSeconds(token.Expires_In).Subtract(TimeSpan.FromHours(4));
+		return token;
 	}
 
 	private HttpRequestMessage CreateTokenRequest()
@@ -96,8 +109,6 @@ public class BattleNetService(IHttpClientFactory httpClientFactory, IConfigurati
 	#endregion Utility
 
 	/**
-    public static readonly string Token = ;
-
         //Account Information:
         ///profile/user/wow
 
@@ -119,8 +130,16 @@ public class BattleNetService(IHttpClientFactory httpClientFactory, IConfigurati
      */
 	public Task<RealmIndexResponse?> GetRealms() => Get<RealmIndexResponse>($"{Base}/data/wow/realm/index", Namespace.Dynamic);
 
-	public Task<CharacterProfile?> GetCharacterProfile(string name, string realm) => Get<CharacterProfile>($"{Base}/profile/wow/character/{realm}/{name?.ToLower()}", Namespace.Profile);
-	public Task<EquipmentSummary?> GetEquipmentSummary(string name, string realm) => Get<EquipmentSummary>($"{Base}/profile/wow/character/{realm}/{name?.ToLower()}/equipment", Namespace.Profile);
+	public Task<CharacterProfile?> GetCharacterProfile(string realmSlug, string characterName) => Get<CharacterProfile>($"{Base}/profile/wow/character/{realmSlug}/{characterName.ToLower()}", Namespace.Profile);
+	public Task<EquipmentSummary?> GetEquipmentSummary(string realmSlug, string characterName) => Get<EquipmentSummary>($"{Base}/profile/wow/character/{realmSlug}/{characterName.ToLower()}/equipment", Namespace.Profile);
 
 	public Task<MediaReference?> GetItemMedia(int id) => Get<MediaReference>($"{Base}/data/wow/media/item/{id}", Namespace.Static);
+
+	public async Task<IEnumerable<MediaReference>> GetItemMedia(int[] ids)
+	{
+		var getMediaTasks = ids.Select(GetItemMedia);
+		var mediaReferences = await Task.WhenAll(getMediaTasks);
+		return mediaReferences?.Where(m => m != null).Select(m => m!)
+			?? Enumerable.Empty<MediaReference>();
+	}
 }

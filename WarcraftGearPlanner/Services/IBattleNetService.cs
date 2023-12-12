@@ -5,8 +5,9 @@ namespace WarcraftGearPlanner.Services;
 
 public interface IBattleNetService
 {
-	Task<CharacterProfile?> GetCharacterProfile(string name, string realm);
-	Task<EquipmentSummary?> GetEquipmentSummary(string name, string realm);
+	Task<CharacterProfile?> GetCharacterProfile(string realmSlug, string characterName);
+	Task<EquipmentSummary?> GetEquipmentSummary(string realmSlug, string characterName);
 	Task<MediaReference?> GetItemMedia(int id);
+	Task<IEnumerable<MediaReference>> GetItemMedia(int[] ids);
 	Task<RealmIndexResponse?> GetRealms();
 }
