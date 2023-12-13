@@ -1,6 +1,0 @@
-@WarcraftGearPlanner_HostAddress = http://localhost:5276
-
-GET {{WarcraftGearPlanner_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
