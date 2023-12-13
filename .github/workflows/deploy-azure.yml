@@ -1,9 +1,5 @@
-name: Build and Deploy
-
-on:
-  push:
-    branches:
-      - master
+name: Build and Deploy - Azure
+on: 
   workflow_dispatch:
 
 jobs:
@@ -24,16 +20,16 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/warcraft-gear-planner
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{env.DOTNET_ROOT}}/warcraft-gear-planner
 
   deploy-azure:
-    name: Deploy DotNet to Azure
+    name: Deploy to Azure
     runs-on: windows-latest
     needs: build-dotnet
     environment:
@@ -54,33 +50,3 @@ jobs:
           slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4B16975D67814F11A7BB7201E645C8D2 }}
           package: .
-
-  build-and-deploy-gh-pages:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-
-      - uses: actions/setup-node@v1 #this installs node and npm for us
-        with:
-          node-version: "20.10.x"
-
-      - uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('WarcraftGearPlanner.Client/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Build
-        run: |
-          cd WarcraftGearPlanner.Client
-          npm install
-          npm run build
-
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: /WarcraftGearPlanner.Client/dist/warcraft-gear-planner
