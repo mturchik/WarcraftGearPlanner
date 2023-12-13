@@ -18,21 +18,13 @@ jobs:
         with:
           node-version: "20.10.x"
 
-      # - name: Cache Packages
-      #   uses: actions/cache@v1
-      #   with:
-      #     path: ~/.npm
-      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node-
-
       - name: Build Angular
         run: |
           cd WarcraftGearPlanner.Client
           npm install
           npm run build
 
-      - name: Upload artifact for deployment job
+      - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           name: angular-app
@@ -44,14 +36,14 @@ jobs:
     needs: build-angular
 
     steps:
-      - name: Download artifact from build job
+      - name: Download Artifact
         uses: actions/download-artifact@v3
         with:
           name: angular-app
 
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: warcraft-gear-planner/
+          FOLDER: warcraft-gear-planner/browser/
