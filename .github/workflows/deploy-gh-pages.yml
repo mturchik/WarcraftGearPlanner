@@ -47,6 +47,10 @@ jobs:
         with:
           name: angular-app
 
+      - name: Build Angular
+        run: |
+          dir
+
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
