@@ -34,7 +34,8 @@
               "maximumError": "4kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "baseHref": "/warcraft-gear-planner/"
         },
         "development": {
           "optimization": false,
