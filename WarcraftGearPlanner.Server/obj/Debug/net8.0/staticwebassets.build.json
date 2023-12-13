@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "X+yhKXfnyzvkexWCM7Dlk/6ZRl30Tkj3x1JPnCd4ghg=",
+  "Source": "WarcraftGearPlanner.Server",
+  "BasePath": "_content/WarcraftGearPlanner.Server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\markt\\source\\repos\\WarcraftGearPlanner\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}|WarcraftGearPlanner.Server\\WarcraftGearPlanner.Server.csproj|c:\\users\\markt\\source\\repos\\warcraftgearplanner\\warcraftgearplanner.server\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}|WarcraftGearPlanner.Server\\WarcraftGearPlanner.Server.csproj|solutionrelative:warcraftgearplanner.server\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}|WarcraftGearPlanner.Server\\WarcraftGearPlanner.Server.csproj|c:\\users\\markt\\source\\repos\\warcraftgearplanner\\warcraftgearplanner.server\\warcraftgearplanner.server.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}|WarcraftGearPlanner.Server\\WarcraftGearPlanner.Server.csproj|solutionrelative:warcraftgearplanner.server\\warcraftgearplanner.server.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}|WarcraftGearPlanner.Server\\WarcraftGearPlanner.Server.csproj|c:\\users\\markt\\source\\repos\\warcraftgearplanner\\warcraftgearplanner.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}|WarcraftGearPlanner.Server\\WarcraftGearPlanner.Server.csproj|solutionrelative:warcraftgearplanner.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 222,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e506b91c-c606-466a-90a9-123d1d1e12b3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\markt\\source\\repos\\WarcraftGearPlanner\\WarcraftGearPlanner.Server\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "WarcraftGearPlanner.Server\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\markt\\source\\repos\\WarcraftGearPlanner\\WarcraftGearPlanner.Server\\Properties\\launchSettings.json",
+              "RelativeToolTip": "WarcraftGearPlanner.Server\\Properties\\launchSettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2023-12-12T05:09:21.21Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "WarcraftGearPlanner.Server.csproj",
+              "DocumentMoniker": "C:\\Users\\markt\\source\\repos\\WarcraftGearPlanner\\WarcraftGearPlanner.Server\\WarcraftGearPlanner.Server.csproj",
+              "RelativeDocumentMoniker": "WarcraftGearPlanner.Server\\WarcraftGearPlanner.Server.csproj",
+              "ToolTip": "C:\\Users\\markt\\source\\repos\\WarcraftGearPlanner\\WarcraftGearPlanner.Server\\WarcraftGearPlanner.Server.csproj",
+              "RelativeToolTip": "WarcraftGearPlanner.Server\\WarcraftGearPlanner.Server.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAABDAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2023-12-12T05:09:23.392Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\markt\\source\\repos\\WarcraftGearPlanner\\WarcraftGearPlanner.Server\\Program.cs",
+              "RelativeDocumentMoniker": "WarcraftGearPlanner.Server\\Program.cs",
+              "ToolTip": "C:\\Users\\markt\\source\\repos\\WarcraftGearPlanner\\WarcraftGearPlanner.Server\\Program.cs",
+              "RelativeToolTip": "WarcraftGearPlanner.Server\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2023-12-12T04:37:55.035Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
