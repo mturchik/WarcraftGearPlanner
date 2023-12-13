@@ -1,6 +1,8 @@
 name: Build and Deploy - GitHub Pages
 on:
   workflow_dispatch:
+permissions:
+  contents: write
 
 jobs:
   build-angular:
@@ -46,10 +48,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: angular-app
-
-      - name: Build Angular
-        run: |
-          dir
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
