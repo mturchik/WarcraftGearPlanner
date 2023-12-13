@@ -1,0 +1,55 @@
+name: Build and Deploy - GitHub Pages
+on:
+  workflow_dispatch:
+
+jobs:
+  build-angular:
+    name: Build Angular
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "20.10.x"
+
+      - name: Cache Packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Build Angular
+        run: |
+          cd WarcraftGearPlanner.Client
+          npm install
+          npm run build
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: angular-app
+          path: ${{env.DOTNET_ROOT}}/WarcraftGearPlanner.Client/dist/warcraft-gear-planner
+
+  deploy-angular:
+    name: Deploy Angular to GitHub Pages
+    runs-on: windows-latest
+    needs: build-angular
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: angular-app
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: /warcraft-gear-planner
