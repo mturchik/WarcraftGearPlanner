@@ -28,7 +28,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: angular-app
-          path: /WarcraftGearPlanner.Client/dist/warcraft-gear-planner
+          path: WarcraftGearPlanner.Client/dist/warcraft-gear-planner
 
   deploy-angular:
     name: Deploy Angular to GitHub Pages
