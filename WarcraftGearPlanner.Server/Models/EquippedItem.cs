@@ -1,20 +1,21 @@
-﻿namespace WarcraftGearPlanner.Models;
+﻿namespace WarcraftGearPlanner.Server.Models;
 
 public class EquippedItem
 {
 	public IndexReference? Item { get; set; }
-	public TypeReference? Slot { get; set; }
+	public IndexReference? Slot { get; set; }
 	public long Quantity { get; set; }
-	public TypeReference? Quality { get; set; }
+	public IndexReference? Quality { get; set; }
 	public string? Name { get; set; }
 	public MediaReference? Media { get; set; }
-	public TypeReference? Binding { get; set; }
+	public IndexReference? Binding { get; set; }
 	public ValueReference? Armor { get; set; }
 	public ItemRequirements? Requirements { get; set; }
 	public ValueReference? Durability { get; set; }
 	public WeaponStats? Weapon { get; set; }
-	public List<Enchantment> Enchantments { get; set; } = new();
-	public List<ValueReference> Stats { get; set; } = new();
+	public List<Enchantment> Enchantments { get; set; } = [];
+	public List<ValueReference> Stats { get; set; } = [];
+	public List<Spell> Spells { get; set; } = [];
 
 	[JsonProperty("item_class")]
 	public IndexReference? ItemClass { get; set; }
@@ -23,7 +24,7 @@ public class EquippedItem
 	public IndexReference? ItemSubclass { get; set; }
 
 	[JsonProperty("inventory_type")]
-	public TypeReference? InventoryType { get; set; }
+	public IndexReference? InventoryType { get; set; }
 
 	[JsonProperty("sell_price")]
 	public SellPrice? SellPrice { get; set; }

@@ -1,6 +1,6 @@
-﻿namespace WarcraftGearPlanner.Models.Response;
+﻿namespace WarcraftGearPlanner.Server.Models.Response;
 
 public class RealmIndexResponse
 {
-	public List<Realm> Realms { get; set; } = new();
+	public List<Realm> Realms { get; set; } = [];
 }

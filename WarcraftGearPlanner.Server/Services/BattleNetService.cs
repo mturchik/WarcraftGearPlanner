@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using System.Net.Http.Headers;
 using System.Text;
-using WarcraftGearPlanner.Extensions;
-using WarcraftGearPlanner.Models;
-using WarcraftGearPlanner.Models.Response;
+using WarcraftGearPlanner.Server.Extensions;
+using WarcraftGearPlanner.Server.Models;
+using WarcraftGearPlanner.Server.Models.Response;
 
-namespace WarcraftGearPlanner.Services;
+namespace WarcraftGearPlanner.Server.Services;
 
 public class BattleNetService(IHttpClientFactory httpClientFactory, IConfiguration configuration, IMemoryCache memoryCache) : IBattleNetService
 {
@@ -128,16 +128,16 @@ public class BattleNetService(IHttpClientFactory httpClientFactory, IConfigurati
         ///guild/activity
         ///guild/achievements
      */
-	public Task<RealmIndexResponse?> GetRealms() => Get<RealmIndexResponse>($"{Base}/data/wow/realm/index", Namespace.Dynamic);
+	public Task<RealmIndexResponse?> GetRealmIndex() => Get<RealmIndexResponse>($"{Base}/data/wow/realm/index", Namespace.Dynamic);
 
 	public Task<CharacterProfile?> GetCharacterProfile(string realmSlug, string characterName) => Get<CharacterProfile>($"{Base}/profile/wow/character/{realmSlug}/{characterName.ToLower()}", Namespace.Profile);
 	public Task<EquipmentSummary?> GetEquipmentSummary(string realmSlug, string characterName) => Get<EquipmentSummary>($"{Base}/profile/wow/character/{realmSlug}/{characterName.ToLower()}/equipment", Namespace.Profile);
 
-	public Task<MediaReference?> GetItemMedia(int id) => Get<MediaReference>($"{Base}/data/wow/media/item/{id}", Namespace.Static);
+	public Task<MediaReference?> GetItemMedia(int itemId) => Get<MediaReference>($"{Base}/data/wow/media/item/{itemId}", Namespace.Static);
 
-	public async Task<IEnumerable<MediaReference>> GetItemMedia(int[] ids)
+	public async Task<IEnumerable<MediaReference>> GetItemMedia(int[] itemIds)
 	{
-		var getMediaTasks = ids.Select(GetItemMedia);
+		var getMediaTasks = itemIds.Select(GetItemMedia);
 		var mediaReferences = await Task.WhenAll(getMediaTasks);
 		return mediaReferences?.Where(m => m != null).Select(m => m!)
 			?? Enumerable.Empty<MediaReference>();

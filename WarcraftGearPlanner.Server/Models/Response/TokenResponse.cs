@@ -1,4 +1,4 @@
-﻿namespace WarcraftGearPlanner.Models.Response;
+﻿namespace WarcraftGearPlanner.Server.Models.Response;
 
 public class TokenResponse
 {

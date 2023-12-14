@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace WarcraftGearPlanner.Extensions;
+namespace WarcraftGearPlanner.Server.Extensions;
 
 public static class HttpClientExtensions
 {

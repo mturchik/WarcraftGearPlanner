@@ -1,12 +1,10 @@
-﻿namespace WarcraftGearPlanner.Models;
+﻿namespace WarcraftGearPlanner.Server.Models;
 
 public class EquipmentSummary
 {
-	public CharacterProfile? Character { get; set; }
-
 	[JsonProperty("equipped_items")]
-	public List<EquippedItem> EquippedItems { get; set; } = new();
+	public List<EquippedItem> EquippedItems { get; set; } = [];
 
-	//[JsonProperty("equipped_item_sets")]
-	//public List<EquippedItemSet> EquippedItemSets { get; set; }
+	[JsonProperty("equipped_item_sets")]
+	public List<EquippedItemSet> EquippedItemSets { get; set; } = [];
 }

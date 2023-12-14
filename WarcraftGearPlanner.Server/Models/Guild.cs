@@ -1,7 +1,7 @@
-﻿namespace WarcraftGearPlanner.Models;
+﻿namespace WarcraftGearPlanner.Server.Models;
 
 public class Guild : IndexReference
 {
 	public Realm? Realm { get; set; }
-	public TypeReference? Faction { get; set; }
+	public IndexReference? Faction { get; set; }
 }

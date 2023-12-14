@@ -1,4 +1,4 @@
-﻿namespace WarcraftGearPlanner.Models;
+﻿namespace WarcraftGearPlanner.Server.Models;
 
 public class DamageStats
 {
@@ -12,5 +12,5 @@ public class DamageStats
 	public string? DisplayString { get; set; }
 
 	[JsonProperty("damage_class")]
-	public TypeReference? DamageClass { get; set; }
+	public IndexReference? DamageClass { get; set; }
 }

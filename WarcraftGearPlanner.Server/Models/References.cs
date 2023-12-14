@@ -1,26 +1,18 @@
-﻿namespace WarcraftGearPlanner.Models;
+﻿namespace WarcraftGearPlanner.Server.Models;
 
 public class IndexReference
 {
-	public int Id { get; set; }
-	public string? Name { get; set; }
-	public UrlReference? Key { get; set; }
-}
-
-public class UrlReference
-{
-	public string? Href { get; set; }
-}
-
-public class TypeReference
-{
+	[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+	public int? Id { get; set; }
+	[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 	public string? Type { get; set; }
+	[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 	public string? Name { get; set; }
 }
 
 public class ValueReference
 {
-	public TypeReference? Type { get; set; }
+	public IndexReference? Type { get; set; }
 	public decimal Value { get; set; }
 	public DisplayReference? Display { get; set; }
 
@@ -51,7 +43,7 @@ public class ColorReference
 public class MediaReference
 {
 	public int Id { get; set; }
-	public List<AssetReference> Assets { get; set; } = new();
+	public List<AssetReference> Assets { get; set; } = [];
 
 	[JsonIgnore]
 	public Uri? DefaultAsset => Assets?.FirstOrDefault()?.Value;

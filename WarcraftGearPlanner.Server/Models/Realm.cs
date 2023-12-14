@@ -1,4 +1,4 @@
-﻿namespace WarcraftGearPlanner.Models;
+﻿namespace WarcraftGearPlanner.Server.Models;
 
 public class Realm : IndexReference
 {
