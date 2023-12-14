@@ -6,6 +6,9 @@ jobs:
   build-dotnet:
     name: Build .NET
     runs-on: ubuntu-latest
+    env:
+      PROJECT: WarcraftGearPlanner.Server/WarcraftGearPlanner.Server.csproj
+      BUILD-CONFIG: Release
 
     steps:
       - uses: actions/checkout@v4
@@ -17,10 +20,10 @@ jobs:
           include-prerelease: true
 
       - name: .NET Build
-        run: dotnet build --configuration Release
+        run: dotnet build {{env.PROJECT}} -c {{env.BUILD-CONFIG}}
 
       - name: .NET Publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/warcraft-gear-planner
+        run: dotnet publish {{env.PROJECT}} -c {{env.BUILD-CONFIG}} -o ${{env.DOTNET_ROOT}}/warcraft-gear-planner
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
