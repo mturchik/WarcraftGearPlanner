@@ -6,24 +6,26 @@ jobs:
   build-dotnet:
     name: Build .NET
     runs-on: ubuntu-latest
+    env:
+      project: "WarcraftGearPlanner.Server/WarcraftGearPlanner.Server.csproj"
+      config: "Release"
+      DOTNET_ROOT: "/home/runner/.dotnet"
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: "8.x"
-          include-prerelease: true
+        uses: actions/setup-dotnet@v4
 
       - name: .NET Build
-        run: dotnet build --configuration Release
+        run: dotnet build ${{env.project}} -c ${{env.config}}
 
       - name: .NET Publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/warcraft-gear-planner
+        run: dotnet publish ${{env.project}} -c ${{env.config}} -o ${{env.DOTNET_ROOT}}/warcraft-gear-planner
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/warcraft-gear-planner
@@ -38,13 +40,13 @@ jobs:
 
     steps:
       - name: Download Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: .net-app
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: "warcraft-gear-planner"
           slot-name: "Production"
