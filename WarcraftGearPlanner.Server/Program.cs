@@ -16,7 +16,7 @@ builder.Services.AddCors(options =>
 {
 	options.AddPolicy("CorsPolicy", policy =>
 	{
-		policy.WithOrigins("http://localhost:4200/", "https://mturchik.github.io/WarcraftGearPlanner/")
+		policy.WithOrigins("http://localhost:4200", "https://mturchik.github.io")
 			.AllowAnyMethod()
 			.AllowAnyHeader();
 	});
@@ -37,6 +37,12 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors("CorsPolicy");
+app.Use(async (context, next) =>
+{
+	var version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "ERROR";
+	context.Response.Headers.Append("x-api-version", version);
+	await next();
+});
 
 app.UseAuthorization();
 
