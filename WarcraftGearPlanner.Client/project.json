@@ -35,7 +35,7 @@
             }
           ],
           "outputHashing": "all",
-          "baseHref": "/warcraft-gear-planner/"
+          "baseHref": "/WarcraftGearPlanner/"
         },
         "development": {
           "optimization": false,
