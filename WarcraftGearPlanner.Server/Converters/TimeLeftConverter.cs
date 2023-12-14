@@ -1,4 +1,4 @@
-﻿namespace WarcraftGearPlanner.Converters;
+﻿namespace WarcraftGearPlanner.Server.Converters;
 
 public enum TimeLeft
 {
@@ -12,26 +12,21 @@ public class TimeLeftConverter : JsonConverter
 {
 	public override bool CanConvert(Type t) => t == typeof(TimeLeft) || t == typeof(TimeLeft?);
 
-	public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+	public override object? ReadJson(JsonReader reader, Type t, object? existingValue, JsonSerializer serializer)
 	{
-		if (reader.TokenType == JsonToken.Null) return null;
-		string? value = serializer.Deserialize<string>(reader);
-		switch (value)
+		if (reader.TokenType == JsonToken.Null) return default;
+		var value = serializer.Deserialize<string>(reader);
+		return value switch
 		{
-			case "LONG":
-				return TimeLeft.Long;
-			case "MEDIUM":
-				return TimeLeft.Medium;
-			case "SHORT":
-				return TimeLeft.Short;
-			case "VERY_LONG":
-				return TimeLeft.VeryLong;
-		}
-
-		throw new Exception("Cannot unmarshal type TimeLeft");
+			"LONG" => TimeLeft.Long,
+			"MEDIUM" => TimeLeft.Medium,
+			"SHORT" => TimeLeft.Short,
+			"VERY_LONG" => TimeLeft.VeryLong,
+			_ => throw new Exception("Cannot read TimeLeft"),
+		};
 	}
 
-	public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+	public override void WriteJson(JsonWriter writer, object? untypedValue, JsonSerializer serializer)
 	{
 		if (untypedValue == null)
 		{
@@ -56,7 +51,7 @@ public class TimeLeftConverter : JsonConverter
 				return;
 		}
 
-		throw new Exception("Cannot marshal type TimeLeft");
+		throw new Exception("Cannot write TimeLeft");
 	}
 
 	public static readonly TimeLeftConverter Singleton = new();

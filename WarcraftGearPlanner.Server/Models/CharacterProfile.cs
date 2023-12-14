@@ -1,4 +1,4 @@
-﻿namespace WarcraftGearPlanner.Models;
+﻿namespace WarcraftGearPlanner.Server.Models;
 
 public class CharacterProfile
 {
@@ -6,17 +6,22 @@ public class CharacterProfile
 	public string? Name { get; set; }
 	public int Level { get; set; }
 	public int Experience { get; set; }
-	public int Average_Item_Level { get; set; }
-	public int Equipped_Item_Level { get; set; }
-	public long Achievement_Points { get; set; }
-	public long Last_Login_Timestamp { get; set; }
-	public TypeReference? Gender { get; set; }
-	public TypeReference? Faction { get; set; }
+	[JsonProperty("is_ghost")]
+	public bool IsGhost { get; set; }
+	[JsonIgnore] public bool IsAlive => !IsGhost;
+	[JsonProperty("average_item_level")]
+	public int AverageItemLevel { get; set; }
+	[JsonProperty("equipped_item_level")]
+	public int EquippedItemLevel { get; set; }
+	[JsonProperty("last_login_timestamp")]
+	public long LastLoginTimestamp { get; set; }
+	[JsonIgnore] public DateTimeOffset LastLogin => DateTimeOffset.FromUnixTimeMilliseconds(LastLoginTimestamp).ToLocalTime();
+	public IndexReference? Gender { get; set; }
+	public IndexReference? Faction { get; set; }
 	public IndexReference? Race { get; set; }
-	public IndexReference? Character_Class { get; set; }
+	[JsonProperty("character_class")]
+	public IndexReference? CharacterClass { get; set; }
 	public Realm? Realm { get; set; }
 	public Guild? Guild { get; set; }
 
-	[JsonIgnore]
-	public DateTimeOffset LastLogin => DateTimeOffset.FromUnixTimeMilliseconds(Last_Login_Timestamp).ToLocalTime();
 }

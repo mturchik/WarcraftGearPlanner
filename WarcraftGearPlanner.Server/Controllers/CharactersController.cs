@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WarcraftGearPlanner.Models;
-using WarcraftGearPlanner.Services;
+using WarcraftGearPlanner.Server.Models;
+using WarcraftGearPlanner.Server.Services;
 
-namespace WarcraftGearPlanner.Controllers;
+namespace WarcraftGearPlanner.Server.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class CharactersController(IBattleNetService battleNetService) : ControllerBase

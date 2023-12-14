@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WarcraftGearPlanner.Models.Response;
-using WarcraftGearPlanner.Services;
+using WarcraftGearPlanner.Server.Models.Response;
+using WarcraftGearPlanner.Server.Services;
 
-namespace WarcraftGearPlanner.Controllers;
+namespace WarcraftGearPlanner.Server.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class RealmsController(IBattleNetService battleNetService) : ControllerBase
@@ -14,7 +14,7 @@ public class RealmsController(IBattleNetService battleNetService) : ControllerBa
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task<ActionResult<RealmIndexResponse>> GetRealms()
 	{
-		var realms = await _battleNetService.GetRealms();
-		return realms is null ? NotFound() : Ok(realms);
+		var realmIndex = await _battleNetService.GetRealmIndex();
+		return realmIndex is null ? NotFound() : Ok(realmIndex.Realms);
 	}
 }
