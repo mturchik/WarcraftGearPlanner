@@ -10,6 +10,8 @@ import { RealmService } from '../services/realm.service';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+  realmIndex$ = this._realmService.getRealmIndex();
+
   constructor(private _realmService: RealmService) {}
 
   ping() {
