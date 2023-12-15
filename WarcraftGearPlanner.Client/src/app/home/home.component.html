@@ -1,0 +1,11 @@
+<p>Warcraft Gear Planner: Home!</p>
+
+<button type="button" class="btn btn-primary" (click)="ping()">
+  Ping Server
+</button>
+
+<ul>
+  <li *ngFor="let item of realmIndex$ | async">
+    {{ item.id }} - {{ item.name }} - {{ item.slug }}
+  </li>
+</ul>
