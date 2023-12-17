@@ -13,9 +13,4 @@ export class HomeComponent {
   realmIndex$ = this._realmService.getRealmIndex();
 
   constructor(private _realmService: RealmService) {}
-
-  ping() {
-    console.log('ping');
-    this._realmService.getRealmIndex().subscribe((x) => console.log(x));
-  }
 }

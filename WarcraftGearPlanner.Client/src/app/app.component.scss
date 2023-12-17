@@ -1,0 +1,7 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+  background-color: rgba(var(--bs-light-rgb), 0.75);
+}
