@@ -1,29 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WarcraftGearPlanner.Server.Models;
 using WarcraftGearPlanner.Server.Services;
+using WarcraftGearPlanner.Shared.Models.Items;
 
 namespace WarcraftGearPlanner.Server.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class ItemsController(IBattleNetService battleNetService) : ControllerBase
+public class ItemsController(IItemsService itemsService) : ControllerBase
 {
-	private readonly IBattleNetService _battleNetService = battleNetService;
+	private readonly IItemsService itemsService = itemsService;
 
-	[HttpGet("media/{itemId}")]
-	[ProducesResponseType<MediaReference>(StatusCodes.Status200OK)]
-	[ProducesResponseType(StatusCodes.Status404NotFound)]
-	public async Task<ActionResult<MediaReference>> GetItemMedia(int itemId)
+	[HttpGet("item-class")]
+	[ProducesResponseType<IEnumerable<ItemClass>>(StatusCodes.Status200OK)]
+	public async Task<ActionResult<IEnumerable<ItemClass>>> GetItemClasses()
 	{
-		var itemMedia = await _battleNetService.GetItemMedia(itemId);
-		return itemMedia is null ? NotFound() : Ok(itemMedia);
+		var itemClasses = await itemsService.GetItemClasses();
+		return Ok(itemClasses);
 	}
 
-	[HttpGet("media")]
-	[ProducesResponseType<IEnumerable<MediaReference>>(StatusCodes.Status200OK)]
-	[ProducesResponseType(StatusCodes.Status404NotFound)]
-	public async Task<ActionResult<IEnumerable<MediaReference>>> GetItemMedia([FromQuery] int[] itemIds)
+	[HttpGet("item-class/{itemClassId}/item-subclass")]
+	[ProducesResponseType<IEnumerable<ItemSubclass>>(StatusCodes.Status200OK)]
+	public async Task<ActionResult<IEnumerable<ItemSubclass>>> GetItemSubclasses(Guid itemClassId)
 	{
-		var itemMedia = await _battleNetService.GetItemMedia(itemIds);
-		return itemMedia is null ? NotFound() : Ok(itemMedia);
+		var itemSubclasses = await itemsService.GetItemSubclasses(itemClassId);
+		return Ok(itemSubclasses);
 	}
 }

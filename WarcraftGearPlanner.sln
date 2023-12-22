@@ -5,6 +5,16 @@ VisualStudioVersion = 17.9.34321.82
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarcraftGearPlanner.Server", "WarcraftGearPlanner.Server\WarcraftGearPlanner.Server.csproj", "{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{584805ED-ACA2-4E7A-A78F-5C80FB848BAE}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarcraftGearPlanner.Functions", "WarcraftGearPlanner.Functions\WarcraftGearPlanner.Functions.csproj", "{28820D3C-6E82-4BAA-97FA-E71509984ED1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarcraftGearPlanner.Shared", "WarcraftGearPlanner.Shared\WarcraftGearPlanner.Shared.csproj", "{72558936-216F-4D6B-AF7B-60CDF8E3D332}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +25,14 @@ Global
 		{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8B70CB5-5122-4288-8DA1-B8CDECC72B14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28820D3C-6E82-4BAA-97FA-E71509984ED1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28820D3C-6E82-4BAA-97FA-E71509984ED1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28820D3C-6E82-4BAA-97FA-E71509984ED1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28820D3C-6E82-4BAA-97FA-E71509984ED1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72558936-216F-4D6B-AF7B-60CDF8E3D332}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72558936-216F-4D6B-AF7B-60CDF8E3D332}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72558936-216F-4D6B-AF7B-60CDF8E3D332}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72558936-216F-4D6B-AF7B-60CDF8E3D332}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
