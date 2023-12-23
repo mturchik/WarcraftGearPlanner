@@ -3,7 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using WarcraftGearPlanner.Server.Data;
 using WarcraftGearPlanner.Server.Data.Entities;
 
-namespace WarcraftGearPlanner.Server.Services;
+namespace WarcraftGearPlanner.Server.Services.Items;
 
 public class ItemsService(
 	IRepository<ItemClassEntity> itemClassRepository,

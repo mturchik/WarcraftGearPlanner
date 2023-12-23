@@ -1,28 +1,30 @@
-using AutoMapper;
+﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using WarcraftGearPlanner.Server.Data;
 using WarcraftGearPlanner.Server.Data.Entities;
 using WarcraftGearPlanner.Server.Data.Repositories;
-using WarcraftGearPlanner.Server.Services;
+using WarcraftGearPlanner.Server.Services.Items;
+using WarcraftGearPlanner.Server.Services.Realms;
+using WarcraftGearPlanner.Shared.Models.Realms;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(contextOptions =>
-{
 	contextOptions.UseSqlServer(
 		builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING"),
-		sqlOptions =>
-		{
-			sqlOptions.EnableRetryOnFailure(3);
-		});
-});
+		sqlOptions => sqlOptions.EnableRetryOnFailure(3)
+));
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IItemsService, ItemsService>();
+builder.Services.AddScoped<IRealmService, RealmService>();
+builder.Services.AddScoped<IValidator<Realm>, RealmValidator>();
 builder.Services.AddScoped<IRepository<ItemClassEntity>, ItemClassRepository>();
 builder.Services.AddScoped<IRepository<ItemSubclassEntity>, ItemSubclassRepository>();
+builder.Services.AddScoped<IRepository<RealmEntity>, RealmRepository>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

@@ -1,5 +1,6 @@
 ﻿namespace WarcraftGearPlanner.Shared.Models;
-public class BaseModel
+public abstract class BaseModel
 {
 	public Guid Id { get; set; }
+	public DateTime CreatedAt { get; private set; }
 }

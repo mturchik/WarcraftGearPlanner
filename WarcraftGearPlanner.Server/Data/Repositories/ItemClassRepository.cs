@@ -8,7 +8,7 @@ public class ItemClassRepository(ApplicationDbContext context) : Repository<Item
 {
 	public override async Task<ItemClassEntity?> GetByIdAsync(Guid id)
 	{
-		var entity = await Table.Include(x => x.Subclasses).FirstOrDefaultAsync(x => x.Id == id);
+		var entity = await TableQuery.Include(x => x.Subclasses).FirstOrDefaultAsync(x => x.Id == id);
 		return entity;
 	}
 

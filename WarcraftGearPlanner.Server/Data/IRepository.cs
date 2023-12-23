@@ -3,12 +3,15 @@ using WarcraftGearPlanner.Server.Data.Entities;
 
 namespace WarcraftGearPlanner.Server.Data;
 
-public interface IRepository<T> where T : BaseEntity
+public interface IRepository<TEntity> where TEntity : BaseEntity
 {
-	Task<T> CreateAsync(T entity);
-	Task DeleteAsync(Guid id);
-	Task<T?> GetAsync(Expression<Func<T, bool>> selector);
-	Task<T?> GetByIdAsync(Guid id);
-	Task<List<T>> GetListAsync(Expression<Func<T, bool>>? selector = null);
-	Task<T> UpdateAsync(T entity);
+	Task<TEntity> CreateAsync(TEntity entity);
+	Task<List<TEntity>> CreateListAsync(List<TEntity> entities);
+	Task DeleteAsync(TEntity entity);
+	Task DeleteListAsync(List<TEntity> entities);
+	Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> selector);
+	Task<TEntity?> GetByIdAsync(Guid id);
+	Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? selector = null);
+	Task<TEntity> UpdateAsync(TEntity entity);
+	Task<List<TEntity>> UpdateListAsync(List<TEntity> entities);
 }
