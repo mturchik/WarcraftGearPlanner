@@ -119,26 +119,26 @@ public class BattleNetService : IBattleNetService
 
 	#endregion Utility
 
-	///**
-	//       //Account Information:
-	//       ///profile/user/wow
+	/**
+		//Account Information:
+		///profile/user/wow
 
-	//       //Character Information:
-	//       ///character
-	//       ///protected-character
-	//       ///character/status
-	//       ///character/equipment
-	//       ///character/pvp-summary (New Mak’gora kill-count added here)
-	//       ///character/pvp-bracket
-	//       ///character/statistics
-	//       ///character/hunter-pets
+		//Character Information:
+		///character
+		///protected-character
+		///character/status
+		///character/equipment
+		///character/pvp-summary (New Mak’gora kill-count added here)
+		///character/pvp-bracket
+		///character/statistics
+		///character/hunter-pets
 
-	//       //Guild Information:
-	//       ///guild
-	//       ///guild/roster
-	//       ///guild/activity
-	//       ///guild/achievements
-	//    */
+		//Guild Information:
+		///guild
+		///guild/roster
+		///guild/activity
+		///guild/achievements
+	*/
 	public Task<RealmIndex?> GetRealmIndex() => Get<RealmIndex>($"/data/wow/realm/index", Namespace.Dynamic);
 
 	//public Task<CharacterProfile?> GetCharacterProfile(string realmSlug, string characterName)

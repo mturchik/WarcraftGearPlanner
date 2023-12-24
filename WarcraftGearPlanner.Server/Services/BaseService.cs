@@ -33,11 +33,10 @@ public abstract class BaseService<TModel, TEntity>(
 
 		entity = mapper.Map<TEntity>(model);
 		var createdEntity = await repository.CreateAsync(entity);
+
+		memoryCache.Remove(cacheKey);
+
 		var createdModel = mapper.Map<TModel>(createdEntity);
-
-		memoryCache.Remove(cacheKey + "_GetList");
-		memoryCache.Set(cacheKey + "_GetById_" + createdModel.Id, createdModel);
-
 		return createdModel;
 	}
 
@@ -54,12 +53,10 @@ public abstract class BaseService<TModel, TEntity>(
 
 		var entities = mapper.Map<List<TEntity>>(models);
 		var createdEntities = await repository.CreateListAsync(entities);
+
+		memoryCache.Remove(cacheKey);
+
 		var createdModels = mapper.Map<List<TModel>>(createdEntities);
-
-		memoryCache.Remove(cacheKey + "_GetList");
-		foreach (var createdModel in createdModels)
-			memoryCache.Set(cacheKey + "_GetById_" + createdModel.Id, createdModel);
-
 		return createdModels;
 	}
 
@@ -70,8 +67,7 @@ public abstract class BaseService<TModel, TEntity>(
 		if (entity is not null)
 			await repository.DeleteAsync(entity);
 
-		memoryCache.Remove(cacheKey + "_GetList");
-		memoryCache.Remove(cacheKey + "_GetById_" + id);
+		memoryCache.Remove(cacheKey);
 	}
 
 	public async Task DeleteListAsync(List<Guid> ids)
@@ -81,9 +77,7 @@ public abstract class BaseService<TModel, TEntity>(
 		if (entities.Count > 0)
 			await repository.DeleteListAsync(entities);
 
-		memoryCache.Remove(cacheKey + "_GetList");
-		foreach (var id in ids)
-			memoryCache.Remove(cacheKey + "_GetById_" + id);
+		memoryCache.Remove(cacheKey);
 	}
 
 	public async Task<TModel?> GetAsync(Expression<Func<TEntity, bool>> selector)
@@ -95,7 +89,7 @@ public abstract class BaseService<TModel, TEntity>(
 
 	public async Task<TModel?> GetByIdAsync(Guid id)
 	{
-		var entity = await memoryCache.GetOrCreateAsync(cacheKey + "_GetById_" + id, entry => repository.GetByIdAsync(id));
+		var entity = await repository.GetByIdAsync(id);
 		var model = mapper.Map<TModel>(entity);
 		return model;
 	}
@@ -103,7 +97,7 @@ public abstract class BaseService<TModel, TEntity>(
 	public async Task<List<TModel>> GetListAsync(Expression<Func<TEntity, bool>>? selector = null)
 	{
 		var entities = selector is null
-			? await memoryCache.GetOrCreateAsync(cacheKey + "_GetList", entry => repository.GetListAsync())
+			? await memoryCache.GetOrCreateAsync(cacheKey, entry => repository.GetListAsync())
 			: await repository.GetListAsync(selector);
 		var models = mapper.Map<List<TModel>>(entities ?? []);
 		return models;
@@ -118,11 +112,10 @@ public abstract class BaseService<TModel, TEntity>(
 
 		mapper.Map(model, entity);
 		entity = await repository.UpdateAsync(entity);
+
+		memoryCache.Remove(cacheKey);
+
 		var updatedModel = mapper.Map<TModel>(entity);
-
-		memoryCache.Remove(cacheKey + "_GetList");
-		memoryCache.Set(cacheKey + "_GetById_" + model.Id, updatedModel);
-
 		return updatedModel;
 	}
 
@@ -141,12 +134,10 @@ public abstract class BaseService<TModel, TEntity>(
 			mapper.Map(model, entity);
 		}
 		entities = await repository.UpdateListAsync(entities);
+
+		memoryCache.Remove(cacheKey);
+
 		var updatedModels = mapper.Map<List<TModel>>(entities);
-
-		memoryCache.Remove(cacheKey + "_GetList");
-		foreach (var updatedModel in updatedModels)
-			memoryCache.Set(cacheKey + "_GetById_" + updatedModel.Id, updatedModel);
-
 		return updatedModels;
 	}
 }

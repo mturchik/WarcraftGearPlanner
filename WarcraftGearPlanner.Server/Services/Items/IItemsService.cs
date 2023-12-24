@@ -4,6 +4,6 @@ namespace WarcraftGearPlanner.Server.Services.Items;
 
 public interface IItemsService
 {
-    Task<List<ItemClassEntity>> GetItemClasses();
-    Task<List<ItemSubclassEntity>> GetItemSubclasses(Guid itemClassId);
+	Task<List<ItemClassEntity>> GetItemClasses();
+	Task<List<ItemSubclassEntity>> GetItemSubclasses(Guid itemClassId);
 }

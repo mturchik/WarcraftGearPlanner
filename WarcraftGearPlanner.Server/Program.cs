@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using WarcraftGearPlanner.Server.Data;
@@ -26,11 +27,16 @@ builder.Services.AddScoped<IRepository<ItemClassEntity>, ItemClassRepository>();
 builder.Services.AddScoped<IRepository<ItemSubclassEntity>, ItemSubclassRepository>();
 builder.Services.AddScoped<IRepository<RealmEntity>, RealmRepository>();
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-	options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-	options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-});
+builder.Services
+	.AddControllers(options =>
+	{
+		options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
+	})
+	.AddJsonOptions(options =>
+	{
+		options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+		options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+	});
 builder.Services.AddCors(options =>
 {
 	options.AddPolicy("CorsPolicy", policy =>

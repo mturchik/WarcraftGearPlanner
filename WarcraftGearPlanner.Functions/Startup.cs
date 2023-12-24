@@ -8,8 +8,10 @@ internal class Startup : FunctionsStartup
 {
 	public override void Configure(IFunctionsHostBuilder builder)
 	{
-		builder.Services.AddHttpClient();
+		builder.Services.AddHttpClient("BattleNetService");
+		builder.Services.AddHttpClient("ApiService");
 
 		builder.Services.AddScoped<IBattleNetService, BattleNetService>();
+		builder.Services.AddScoped<IApiService, ApiService>();
 	}
 }

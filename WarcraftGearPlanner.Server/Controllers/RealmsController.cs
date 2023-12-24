@@ -36,7 +36,7 @@ public class RealmsController(IRealmService realmService) : ControllerBase
 
 	[HttpDelete]
 	[ProducesResponseType(StatusCodes.Status200OK)]
-	public async Task<ActionResult> DeleteRealms([FromBody] List<Guid> ids)
+	public async Task<ActionResult> DeleteRealms([FromQuery] List<Guid> ids)
 	{
 		await realmService.DeleteListAsync(ids);
 		return Ok();
