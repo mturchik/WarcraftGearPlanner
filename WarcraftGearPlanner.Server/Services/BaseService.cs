@@ -23,7 +23,7 @@ public abstract class BaseService<TModel, TEntity>(
 	protected readonly IMapper mapper = mapper;
 	protected readonly string cacheKey = typeof(TEntity).Name;
 
-	public async Task<TModel> CreateAsync(TModel model)
+	public virtual async Task<TModel> CreateAsync(TModel model)
 	{
 		await validator.ValidateAndThrowAsync(model);
 
@@ -40,7 +40,7 @@ public abstract class BaseService<TModel, TEntity>(
 		return createdModel;
 	}
 
-	public async Task<List<TModel>> CreateListAsync(List<TModel> models)
+	public virtual async Task<List<TModel>> CreateListAsync(List<TModel> models)
 	{
 		foreach (var model in models)
 		{
@@ -60,7 +60,7 @@ public abstract class BaseService<TModel, TEntity>(
 		return createdModels;
 	}
 
-	public async Task DeleteAsync(Guid id)
+	public virtual async Task DeleteAsync(Guid id)
 	{
 		var entity = await repository.GetByIdAsync(id);
 
@@ -70,7 +70,7 @@ public abstract class BaseService<TModel, TEntity>(
 		memoryCache.Remove(cacheKey);
 	}
 
-	public async Task DeleteListAsync(List<Guid> ids)
+	public virtual async Task DeleteListAsync(List<Guid> ids)
 	{
 		var entities = await repository.GetListAsync(e => ids.Contains(e.Id));
 
@@ -80,21 +80,21 @@ public abstract class BaseService<TModel, TEntity>(
 		memoryCache.Remove(cacheKey);
 	}
 
-	public async Task<TModel?> GetAsync(Expression<Func<TEntity, bool>> selector)
+	public virtual async Task<TModel?> GetAsync(Expression<Func<TEntity, bool>> selector)
 	{
 		var entity = await repository.GetAsync(selector);
 		var model = mapper.Map<TModel>(entity);
 		return model;
 	}
 
-	public async Task<TModel?> GetByIdAsync(Guid id)
+	public virtual async Task<TModel?> GetByIdAsync(Guid id)
 	{
 		var entity = await repository.GetByIdAsync(id);
 		var model = mapper.Map<TModel>(entity);
 		return model;
 	}
 
-	public async Task<List<TModel>> GetListAsync(Expression<Func<TEntity, bool>>? selector = null)
+	public virtual async Task<List<TModel>> GetListAsync(Expression<Func<TEntity, bool>>? selector = null)
 	{
 		var entities = selector is null
 			? await memoryCache.GetOrCreateAsync(cacheKey, entry => repository.GetListAsync())
@@ -103,7 +103,7 @@ public abstract class BaseService<TModel, TEntity>(
 		return models;
 	}
 
-	public async Task<TModel> UpdateAsync(TModel model)
+	public virtual async Task<TModel> UpdateAsync(TModel model)
 	{
 		await validator.ValidateAndThrowAsync(model);
 
@@ -119,7 +119,7 @@ public abstract class BaseService<TModel, TEntity>(
 		return updatedModel;
 	}
 
-	public async Task<List<TModel>> UpdateListAsync(List<TModel> models)
+	public virtual async Task<List<TModel>> UpdateListAsync(List<TModel> models)
 	{
 		foreach (var model in models)
 			await validator.ValidateAndThrowAsync(model);

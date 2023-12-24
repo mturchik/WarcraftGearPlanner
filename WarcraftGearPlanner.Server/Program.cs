@@ -8,6 +8,7 @@ using WarcraftGearPlanner.Server.Data.Entities;
 using WarcraftGearPlanner.Server.Data.Repositories;
 using WarcraftGearPlanner.Server.Services.Items;
 using WarcraftGearPlanner.Server.Services.Realms;
+using WarcraftGearPlanner.Shared.Models.Items;
 using WarcraftGearPlanner.Shared.Models.Realms;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,8 +21,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(contextOptions =>
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
-builder.Services.AddScoped<IItemsService, ItemsService>();
+builder.Services.AddScoped<IItemClassService, ItemClassService>();
 builder.Services.AddScoped<IRealmService, RealmService>();
+builder.Services.AddScoped<IValidator<ItemClass>, ItemClassValidator>();
 builder.Services.AddScoped<IValidator<Realm>, RealmValidator>();
 builder.Services.AddScoped<IRepository<ItemClassEntity>, ItemClassRepository>();
 builder.Services.AddScoped<IRepository<ItemSubclassEntity>, ItemSubclassRepository>();
