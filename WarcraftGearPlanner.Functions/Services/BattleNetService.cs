@@ -152,6 +152,7 @@ public class BattleNetService : IBattleNetService
 	//	=> Get<Media>($"{Base}/data/wow/media/item/{itemId}", Namespace.Static);
 	public Task<ItemClassIndex?> GetItemClassIndex() => Get<ItemClassIndex>($"/data/wow/item-class/index", Namespace.Static);
 	public Task<ItemClass?> GetItemClass(int itemClassId) => Get<ItemClass>($"/data/wow/item-class/{itemClassId}", Namespace.Static);
+	public Task<ItemSubclass?> GetItemSubclass(int itemClassId, int itemSubclassId) => Get<ItemSubclass>($"/data/wow/item-class/{itemClassId}/item-subclass/{itemSubclassId}", Namespace.Static);
 	//public Task<SearchResponse<Item>?> SearchItems(SearchRequest<ItemSearchParameters> request)
 	//	=> Get<SearchResponse<Item>>($"{Base}/data/wow/search/item{request.GetQueryString()}", Namespace.Static);
 

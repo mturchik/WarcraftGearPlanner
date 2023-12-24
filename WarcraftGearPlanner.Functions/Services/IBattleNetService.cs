@@ -7,5 +7,6 @@ public interface IBattleNetService
 {
 	Task<ItemClass?> GetItemClass(int itemClassId);
 	Task<ItemClassIndex?> GetItemClassIndex();
+	Task<ItemSubclass?> GetItemSubclass(int itemClassId, int itemSubclassId);
 	Task<RealmIndex?> GetRealmIndex();
 }

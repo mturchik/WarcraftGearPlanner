@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualBasic.FileIO;
-using Newtonsoft.Json.Linq;
 
 namespace WarcraftGearPlanner.Functions.Extensions;
 
@@ -36,7 +35,8 @@ public static class HttpClientExtensions
 	{
 		var directory = SpecialDirectories.MyDocuments + @"\WarcraftGearPlanner_DebugResponses";
 		Directory.CreateDirectory(directory);
-		using var writer = new StreamWriter($"{directory}/{DateTime.Now:yyMMdd-HHmmss_ff}.json", true);
+		var fileName = response.RequestMessage?.RequestUri?.AbsolutePath.Replace("/", "_").Replace("?", "_").Replace("&", "_");
+		using var writer = new StreamWriter($"{directory}/{DateTime.Now:yy-MM-dd-HH-mm-ss-ffff}-{fileName}.json", true);
 		await writer.WriteLineAsync($"// Request URI: {response.RequestMessage?.RequestUri}");
 		await writer.WriteLineAsync($"// Status Code: {response.StatusCode}");
 		foreach (var header in response.Headers)
@@ -46,7 +46,7 @@ public static class HttpClientExtensions
 		if (string.IsNullOrEmpty(content)) await writer.WriteLineAsync("// Content: null");
 		else
 		{
-			var obj = JObject.Parse(content);
+			var obj = JsonConvert.DeserializeObject(content);
 			var formattedContent = JsonConvert.SerializeObject(obj, Formatting.Indented);
 			await writer.WriteLineAsync(formattedContent);
 		}
