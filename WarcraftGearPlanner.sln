@@ -8,12 +8,16 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{584805ED-ACA2-4E7A-A78F-5C80FB848BAE}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		.github\workflows\deploy-azure.yml = .github\workflows\deploy-azure.yml
+		.github\workflows\deploy-gh-pages.yml = .github\workflows\deploy-gh-pages.yml
+		.config\dotnet-tools.json = .config\dotnet-tools.json
+		.github\workflows\master_warcraft-gear-planner-func.yml = .github\workflows\master_warcraft-gear-planner-func.yml
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarcraftGearPlanner.Functions", "WarcraftGearPlanner.Functions\WarcraftGearPlanner.Functions.csproj", "{28820D3C-6E82-4BAA-97FA-E71509984ED1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarcraftGearPlanner.Functions", "WarcraftGearPlanner.Functions\WarcraftGearPlanner.Functions.csproj", "{28820D3C-6E82-4BAA-97FA-E71509984ED1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarcraftGearPlanner.Shared", "WarcraftGearPlanner.Shared\WarcraftGearPlanner.Shared.csproj", "{72558936-216F-4D6B-AF7B-60CDF8E3D332}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarcraftGearPlanner.Shared", "WarcraftGearPlanner.Shared\WarcraftGearPlanner.Shared.csproj", "{72558936-216F-4D6B-AF7B-60CDF8E3D332}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
