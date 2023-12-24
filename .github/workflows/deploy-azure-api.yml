@@ -1,0 +1,54 @@
+name: Build and Deploy - Azure API App
+on:
+  workflow_dispatch:
+
+jobs:
+  build-dotnet:
+    name: Build .NET
+    runs-on: ubuntu-latest
+    env:
+      project: "WarcraftGearPlanner.Server/WarcraftGearPlanner.Server.csproj"
+      config: "Release"
+      DOTNET_ROOT: "/home/runner/.dotnet"
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+
+      - name: .NET Build
+        run: dotnet build ${{env.project}} -c ${{env.config}}
+
+      - name: .NET Publish
+        run: dotnet publish ${{env.project}} -c ${{env.config}} -o ${{env.DOTNET_ROOT}}/warcraft-gear-planner
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/warcraft-gear-planner
+
+  deploy-azure:
+    name: Deploy to Azure
+    runs-on: ubuntu-latest
+    needs: build-dotnet
+    environment:
+      name: "Production"
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: "warcraft-gear-planner"
+          slot-name: "Production"
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4B16975D67814F11A7BB7201E645C8D2 }}
+          package: .

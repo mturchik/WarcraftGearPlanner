@@ -1,20 +1,44 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WarcraftGearPlanner.Server.Models.Response;
-using WarcraftGearPlanner.Server.Services;
+using WarcraftGearPlanner.Server.Services.Realms;
+using WarcraftGearPlanner.Shared.Models.Realms;
 
 namespace WarcraftGearPlanner.Server.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class RealmsController(IBattleNetService battleNetService) : ControllerBase
+public class RealmsController(IRealmService realmService) : ControllerBase
 {
-	private readonly IBattleNetService _battleNetService = battleNetService;
+	private readonly IRealmService realmService = realmService;
 
 	[HttpGet]
-	[ProducesResponseType<RealmIndexResponse>(StatusCodes.Status200OK)]
+	[ProducesResponseType<List<Realm>>(StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
-	public async Task<ActionResult<RealmIndexResponse>> GetRealms()
+	public async Task<ActionResult<List<Realm>>> GetRealms()
 	{
-		var realmIndex = await _battleNetService.GetRealmIndex();
-		return realmIndex is null ? NotFound() : Ok(realmIndex.Realms);
+		var realms = await realmService.GetListAsync();
+		return Ok(realms);
+	}
+
+	[HttpPost]
+	[ProducesResponseType<List<Realm>>(StatusCodes.Status200OK)]
+	public async Task<ActionResult<List<Realm>>> PostRealms([FromBody] List<Realm> realms)
+	{
+		var createdRealms = await realmService.CreateListAsync(realms);
+		return Ok(createdRealms);
+	}
+
+	[HttpPut]
+	[ProducesResponseType<List<Realm>>(StatusCodes.Status200OK)]
+	public async Task<ActionResult<List<Realm>>> PutRealms([FromBody] List<Realm> realms)
+	{
+		var updatedRealms = await realmService.UpdateListAsync(realms);
+		return Ok(updatedRealms);
+	}
+
+	[HttpDelete]
+	[ProducesResponseType(StatusCodes.Status200OK)]
+	public async Task<ActionResult> DeleteRealms([FromQuery] List<Guid> ids)
+	{
+		await realmService.DeleteListAsync(ids);
+		return Ok();
 	}
 }

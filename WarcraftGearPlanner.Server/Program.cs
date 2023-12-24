@@ -1,17 +1,44 @@
+﻿using AutoMapper;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-using WarcraftGearPlanner.Server.Services;
+using WarcraftGearPlanner.Server.Data;
+using WarcraftGearPlanner.Server.Data.Entities;
+using WarcraftGearPlanner.Server.Data.Repositories;
+using WarcraftGearPlanner.Server.Services.Items;
+using WarcraftGearPlanner.Server.Services.Realms;
+using WarcraftGearPlanner.Shared.Models.Items;
+using WarcraftGearPlanner.Shared.Models.Realms;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<ApplicationDbContext>(contextOptions =>
+	contextOptions.UseSqlServer(
+		builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING"),
+		sqlOptions => sqlOptions.EnableRetryOnFailure(3)
+));
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
-builder.Services.AddScoped<IBattleNetService, BattleNetService>();
+builder.Services.AddScoped<IItemClassService, ItemClassService>();
+builder.Services.AddScoped<IRealmService, RealmService>();
+builder.Services.AddScoped<IValidator<ItemClass>, ItemClassValidator>();
+builder.Services.AddScoped<IValidator<Realm>, RealmValidator>();
+builder.Services.AddScoped<IRepository<ItemClassEntity>, ItemClassRepository>();
+builder.Services.AddScoped<IRepository<ItemSubclassEntity>, ItemSubclassRepository>();
+builder.Services.AddScoped<IRepository<RealmEntity>, RealmRepository>();
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-	options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-	options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-});
+builder.Services
+	.AddControllers(options =>
+	{
+		options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
+	})
+	.AddJsonOptions(options =>
+	{
+		options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+		options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+	});
 builder.Services.AddCors(options =>
 {
 	options.AddPolicy("CorsPolicy", policy =>
@@ -21,17 +48,16 @@ builder.Services.AddCors(options =>
 			.AllowAnyHeader();
 	});
 });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
+	app.Services.GetRequiredService<IMapper>().ConfigurationProvider.AssertConfigurationIsValid();
 }
 
 app.UseHttpsRedirection();
