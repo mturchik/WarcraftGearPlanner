@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using Azure.Core;
+using Azure.Identity;
+using System.Net.Http.Headers;
+using System.Text;
 using WarcraftGearPlanner.Functions.Extensions;
 
 namespace WarcraftGearPlanner.Functions.Services;
@@ -12,6 +15,12 @@ public class ApiService : IApiService
 		_httpClient = httpClientFactory.CreateClient("ApiService");
 		_apiUrl = Environment.GetEnvironmentVariable("API_URL")
 			?? throw new ApplicationException("API_URL environment variable is not set");
+
+		var auth = new EnvironmentCredential();
+		var clientId = Environment.GetEnvironmentVariable("AZURE_CLIENT_ID")
+			?? throw new ApplicationException("AZURE_CLIENT_ID environment variable is not set");
+		var accessToken = auth.GetToken(new TokenRequestContext(new[] { $"api://{clientId}/.default" }));
+		_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.Token);
 	}
 
 	public Task Delete(string url) => _httpClient.DeleteAsync(_apiUrl + url);
