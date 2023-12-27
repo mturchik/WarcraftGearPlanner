@@ -1,6 +1,7 @@
 using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
+using WarcraftGearPlanner.Functions.Models.Enum;
 using WarcraftGearPlanner.Functions.Models.Events;
 using WarcraftGearPlanner.Functions.Models.Items;
 using WarcraftGearPlanner.Functions.Models.Search;
@@ -33,6 +34,8 @@ public class ValidateItemsEventHandler
 		var itemRequest = new SearchRequest<ItemSearchParameters>
 		{
 			Page = 1,
+			OrderBy = "id",
+			OrderDirection = OrderDirection.Asc,
 			Parameters = new()
 			{
 				ItemClassId = eventMessage.ClassId,
@@ -46,7 +49,7 @@ public class ValidateItemsEventHandler
 			log.LogInformation($"Retrieved page {searchResponse?.Page} of {searchResponse?.PageCount} with {searchResponse?.Results?.Count} items from Battle.net API");
 			if (searchResponse is null) return;
 
-			if (searchResponse.ResultCountCapped)
+			if (searchResponse.ResultCountCapped && searchResponse.Page == 1)
 			{
 				log.LogWarning("Result count capped, not all items were returned");
 				await _serviceBusSender.SendMessageAsync(new ServiceBusMessage(JsonConvert.SerializeObject(eventMessage)));

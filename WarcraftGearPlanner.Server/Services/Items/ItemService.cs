@@ -79,7 +79,7 @@ public class ItemService(
 				Type = i.ItemQualityType ?? "",
 				Name = i.ItemQualityName ?? ""
 			})
-			.DistinctBy(q => q.Type)
+			.DistinctBy(q => $"{q.Type}-{q.Name}")
 			.ToList();
 
 		var types = itemQualities.Select(m => m.Type).ToList();
@@ -102,7 +102,7 @@ public class ItemService(
 				Type = i.InventoryTypeType ?? "",
 				Name = i.InventoryTypeName ?? ""
 			})
-			.DistinctBy(q => q.Type)
+			.DistinctBy(q => $"{q.Type}-{q.Name}")
 			.ToList();
 
 		var types = inventoryTypes.Select(m => m.Type).ToList();
