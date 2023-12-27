@@ -22,6 +22,8 @@ public class ValidateReferenceTables
 	[FunctionName("ValidateReferenceTables")]
 	public async Task Run([TimerTrigger("0 0 0 * * 0")] TimerInfo myTimer, ILogger logger)
 	{
+		if (myTimer is null) throw new ArgumentNullException(nameof(myTimer));
+
 		_logger = logger;
 		_logger.LogInformation($"ValidateReferenceTables executed at: {DateTime.Now}");
 

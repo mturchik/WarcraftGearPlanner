@@ -25,6 +25,8 @@ public class ValidateItems
 	[FunctionName("ValidateItems")]
 	public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequest req, ILogger log)
 	{
+		if (req is null) throw new ArgumentNullException(nameof(req));
+
 		log.LogInformation("ValidateItems processed a request.");
 
 		var itemClasses = await _apiService.Get<List<ItemClassDTO>>("/item-classes") ?? new();

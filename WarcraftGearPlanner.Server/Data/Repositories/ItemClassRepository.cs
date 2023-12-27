@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using WarcraftGearPlanner.Server.Data.Entities;
 
 namespace WarcraftGearPlanner.Server.Data.Repositories;
@@ -7,13 +8,20 @@ public class ItemClassRepository(ApplicationDbContext context) : Repository<Item
 {
 	public override async Task<ItemClassEntity?> GetByIdAsync(Guid id)
 	{
-		var entity = await TableQuery.Include(x => x.Subclasses).FirstOrDefaultAsync(x => x.Id == id);
+		var entity = await TableQuery
+			.Include(x => x.Subclasses)
+			.FirstOrDefaultAsync(x => x.Id == id);
 		return entity;
 	}
 
-	public override async Task<List<ItemClassEntity>> GetListAsync()
+	public override async Task<List<ItemClassEntity>> GetListAsync(Expression<Func<ItemClassEntity, bool>>? selector)
 	{
-		var entities = await TableQuery.Include(x => x.Subclasses).ToListAsync();
+		var query = TableQuery;
+		if (selector is not null) query = query.Where(selector);
+
+		var entities = await query
+			.Include(x => x.Subclasses)
+			.ToListAsync();
 		return entities;
 	}
 }

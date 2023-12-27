@@ -12,6 +12,8 @@ public static class Status
 	[FunctionName("Status")]
 	public static IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequest req, ILogger log)
 	{
+		if (req is null) throw new ArgumentNullException(nameof(req));
+
 		log.LogInformation("Status processed a request.");
 
 		var version = Assembly.GetExecutingAssembly().GetName().Version;
