@@ -1,4 +1,4 @@
-﻿namespace WarcraftGearPlanner.Functions.Models.Request;
+﻿namespace WarcraftGearPlanner.Functions.Models.Search;
 
 public abstract class BaseSearchParameters
 {

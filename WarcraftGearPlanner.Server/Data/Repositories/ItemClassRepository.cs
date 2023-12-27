@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using WarcraftGearPlanner.Server.Data.Entities;
 
 namespace WarcraftGearPlanner.Server.Data.Repositories;
@@ -12,11 +11,9 @@ public class ItemClassRepository(ApplicationDbContext context) : Repository<Item
 		return entity;
 	}
 
-	public override async Task<List<ItemClassEntity>> GetListAsync(Expression<Func<ItemClassEntity, bool>>? selector = null)
+	public override async Task<List<ItemClassEntity>> GetListAsync()
 	{
-		var query = TableQuery;
-		if (selector != null) query = query.Where(selector);
-		var entities = await query.Include(x => x.Subclasses).ToListAsync();
+		var entities = await TableQuery.Include(x => x.Subclasses).ToListAsync();
 		return entities;
 	}
 }

@@ -23,7 +23,7 @@ public class ValidateReferenceTables
 	public async Task Run([TimerTrigger("0 0 0 * * 0")] TimerInfo myTimer, ILogger logger)
 	{
 		_logger = logger;
-		_logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+		_logger.LogInformation($"ValidateReferenceTables executed at: {DateTime.Now}");
 
 		_logger.LogInformation("Validating reference tables...");
 

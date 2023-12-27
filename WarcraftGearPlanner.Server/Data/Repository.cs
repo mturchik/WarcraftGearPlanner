@@ -51,12 +51,9 @@ public abstract class Repository<TEntity>(ApplicationDbContext context) : IRepos
 		return entity;
 	}
 
-	public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? selector = null)
+	public virtual async Task<List<TEntity>> GetListAsync()
 	{
-		var query = TableQuery;
-		if (selector != null) query = query.Where(selector);
-
-		var entities = await query.ToListAsync();
+		var entities = await TableQuery.ToListAsync();
 		return entities;
 	}
 

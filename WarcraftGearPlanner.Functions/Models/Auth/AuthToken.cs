@@ -1,4 +1,4 @@
-﻿namespace WarcraftGearPlanner.Functions.Models.Response;
+﻿namespace WarcraftGearPlanner.Functions.Models.Auth;
 
 public class AuthToken
 {
