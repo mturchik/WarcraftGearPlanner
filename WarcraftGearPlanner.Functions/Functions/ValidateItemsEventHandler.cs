@@ -1,3 +1,4 @@
+using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using WarcraftGearPlanner.Functions.Models.Events;
@@ -12,11 +13,13 @@ public class ValidateItemsEventHandler
 {
 	private readonly IBattleNetService _battleNetService;
 	private readonly IApiService _apiService;
+	private readonly ServiceBusSender _serviceBusSender;
 
-	public ValidateItemsEventHandler(IBattleNetService battleNetService, IApiService apiService)
+	public ValidateItemsEventHandler(IBattleNetService battleNetService, IApiService apiService, ServiceBusClient _serviceBusClient)
 	{
 		_battleNetService = battleNetService;
 		_apiService = apiService;
+		_serviceBusSender = _serviceBusClient.CreateSender("validate-items-results-capped");
 	}
 
 	[FunctionName("ValidateItemsEventHandler")]
@@ -42,6 +45,12 @@ public class ValidateItemsEventHandler
 			searchResponse = await _battleNetService.SearchItems(itemRequest);
 			log.LogInformation($"Retrieved page {searchResponse?.Page} of {searchResponse?.PageCount} with {searchResponse?.Results?.Count} items from Battle.net API");
 			if (searchResponse is null) return;
+
+			if (searchResponse.ResultCountCapped)
+			{
+				log.LogWarning("Result count capped, not all items were returned");
+				await _serviceBusSender.SendMessageAsync(new ServiceBusMessage(JsonConvert.SerializeObject(eventMessage)));
+			}
 
 			var items = searchResponse.Results
 				.Where(s => s.Data is not null)
