@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WarcraftGearPlanner.Server.Data.Entities;
 
+[Index("ItemClassId", "SubclassId", IsUnique = true)]
 public class ItemSubclassEntity : BaseEntity
 {
 	public int SubclassId { get; set; }
