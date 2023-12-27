@@ -68,8 +68,15 @@ public class ValidateItemsEventHandler
 				.ToList();
 			log.LogInformation($"Sending {items.Count} items to API");
 
-			var putItems = await _apiService.Put("/items/search-results", items) ?? new();
-			log.LogInformation($"Created {putItems.Count} items in API");
+			try
+			{
+				var putItems = await _apiService.Put("/items/search-results", items) ?? new();
+				log.LogInformation($"Created {putItems.Count} items in API");
+			}
+			catch (ApplicationException ex)
+			{
+				log.LogError(ex, "Error calling API");
+			}
 
 			itemRequest.Page++;
 		} while (searchResponse.Page < searchResponse.PageCount);
