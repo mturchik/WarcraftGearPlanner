@@ -12,4 +12,7 @@ public class ItemSubclassEntity : BaseEntity
 	[ForeignKey(nameof(ItemClass))]
 	public Guid ItemClassId { get; set; }
 	public ItemClassEntity? ItemClass { get; set; }
+
+	[InverseProperty(nameof(ItemEntity.ItemSubclass))]
+	public List<ItemEntity>? Items { get; set; }
 }

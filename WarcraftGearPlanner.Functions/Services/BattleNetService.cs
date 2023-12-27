@@ -1,22 +1,25 @@
-﻿using System.Net.Http.Headers;
+﻿using Microsoft.Extensions.Caching.Memory;
+using System.Net.Http.Headers;
 using System.Security.Authentication;
 using System.Text;
 using WarcraftGearPlanner.Functions.Extensions;
+using WarcraftGearPlanner.Functions.Models.Auth;
 using WarcraftGearPlanner.Functions.Models.Enum;
 using WarcraftGearPlanner.Functions.Models.Items;
 using WarcraftGearPlanner.Functions.Models.Realms;
-using WarcraftGearPlanner.Functions.Models.Response;
+using WarcraftGearPlanner.Functions.Models.Search;
 
 namespace WarcraftGearPlanner.Functions.Services;
 
 public class BattleNetService : IBattleNetService
 {
 	private readonly HttpClient _httpClient;
-	private AuthToken? Token;
+	private readonly IMemoryCache _memoryCache;
 
-	public BattleNetService(IHttpClientFactory httpClientFactory)
+	public BattleNetService(IHttpClientFactory httpClientFactory, IMemoryCache memoryCache)
 	{
 		_httpClient = httpClientFactory.CreateClient("BattleNetService");
+		_memoryCache = memoryCache;
 	}
 
 	#region Utility
@@ -32,13 +35,18 @@ public class BattleNetService : IBattleNetService
 
 	private async Task<string?> GetAuthorizationToken()
 	{
-		if (Token?.ExpiresOn is null || Token.ExpiresOn <= DateTime.UtcNow)
+		var accessToken = await _memoryCache.GetOrCreateAsync("BattleNetAccessToken", async entry =>
 		{
-			Token = await SendTokenRequest();
-			if (Token == null) throw new AuthenticationException("Unable to retrieve Battle.net OAuth token");
+			entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+			return await SendTokenRequest();
+		});
+		if (accessToken?.ExpiresOn is null || accessToken.ExpiresOn <= DateTime.UtcNow)
+		{
+			accessToken = await SendTokenRequest();
+			if (accessToken == null) throw new AuthenticationException("Unable to retrieve Battle.net OAuth token");
 		}
 
-		return Token?.AccessToken;
+		return accessToken.AccessToken;
 	}
 
 	private async Task<AuthToken?> SendTokenRequest()
@@ -153,8 +161,8 @@ public class BattleNetService : IBattleNetService
 	public Task<ItemClassIndex?> GetItemClassIndex() => Get<ItemClassIndex>($"/data/wow/item-class/index", Namespace.Static);
 	public Task<ItemClass?> GetItemClass(int itemClassId) => Get<ItemClass>($"/data/wow/item-class/{itemClassId}", Namespace.Static);
 	public Task<ItemSubclass?> GetItemSubclass(int itemClassId, int itemSubclassId) => Get<ItemSubclass>($"/data/wow/item-class/{itemClassId}/item-subclass/{itemSubclassId}", Namespace.Static);
-	//public Task<SearchResponse<Item>?> SearchItems(SearchRequest<ItemSearchParameters> request)
-	//	=> Get<SearchResponse<Item>>($"{Base}/data/wow/search/item{request.GetQueryString()}", Namespace.Static);
+	public Task<SearchResponse<ItemSearchResult>?> SearchItems(SearchRequest<ItemSearchParameters> request)
+		=> Get<SearchResponse<ItemSearchResult>>($"/data/wow/search/item{request.GetQueryString()}", Namespace.Static);
 
 	//public async Task<IEnumerable<Media>> GetItemMedia(int[] itemIds)
 	//{

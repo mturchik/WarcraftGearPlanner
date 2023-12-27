@@ -21,10 +21,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(contextOptions =>
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
+builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IItemClassService, ItemClassService>();
 builder.Services.AddScoped<IRealmService, RealmService>();
+builder.Services.AddScoped<IValidator<Item>, ItemValidator>();
 builder.Services.AddScoped<IValidator<ItemClass>, ItemClassValidator>();
 builder.Services.AddScoped<IValidator<Realm>, RealmValidator>();
+builder.Services.AddScoped<IRepository<ItemEntity>, ItemRepository>();
+builder.Services.AddScoped<IRepository<ItemQualityEntity>, ItemQualityRepository>();
+builder.Services.AddScoped<IRepository<InventoryTypeEntity>, InventoryTypeRepository>();
 builder.Services.AddScoped<IRepository<ItemClassEntity>, ItemClassRepository>();
 builder.Services.AddScoped<IRepository<ItemSubclassEntity>, ItemSubclassRepository>();
 builder.Services.AddScoped<IRepository<RealmEntity>, RealmRepository>();

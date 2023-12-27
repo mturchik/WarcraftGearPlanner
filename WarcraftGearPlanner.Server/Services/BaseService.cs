@@ -94,11 +94,10 @@ public abstract class BaseService<TModel, TEntity>(
 		return model;
 	}
 
-	public virtual async Task<List<TModel>> GetListAsync(Expression<Func<TEntity, bool>>? selector = null)
+	public virtual async Task<List<TModel>> GetListAsync()
 	{
-		var entities = selector is null
-			? await memoryCache.GetOrCreateAsync(cacheKey, entry => repository.GetListAsync())
-			: await repository.GetListAsync(selector);
+		var entities = await memoryCache.GetOrCreateAsync(cacheKey, entry => repository.GetListAsync());
+
 		var models = mapper.Map<List<TModel>>(entities ?? []);
 		return models;
 	}

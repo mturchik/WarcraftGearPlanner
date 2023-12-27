@@ -8,15 +8,20 @@ public class ItemClassRepository(ApplicationDbContext context) : Repository<Item
 {
 	public override async Task<ItemClassEntity?> GetByIdAsync(Guid id)
 	{
-		var entity = await TableQuery.Include(x => x.Subclasses).FirstOrDefaultAsync(x => x.Id == id);
+		var entity = await TableQuery
+			.Include(x => x.Subclasses)
+			.FirstOrDefaultAsync(x => x.Id == id);
 		return entity;
 	}
 
-	public override async Task<List<ItemClassEntity>> GetListAsync(Expression<Func<ItemClassEntity, bool>>? selector = null)
+	public override async Task<List<ItemClassEntity>> GetListAsync(Expression<Func<ItemClassEntity, bool>>? selector)
 	{
 		var query = TableQuery;
-		if (selector != null) query = query.Where(selector);
-		var entities = await query.Include(x => x.Subclasses).ToListAsync();
+		if (selector is not null) query = query.Where(selector);
+
+		var entities = await query
+			.Include(x => x.Subclasses)
+			.ToListAsync();
 		return entities;
 	}
 }

@@ -12,7 +12,9 @@ public static class Status
 	[FunctionName("Status")]
 	public static IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequest req, ILogger log)
 	{
-		log.LogInformation("C# HTTP trigger function processed a request.");
+		if (req is null) throw new ArgumentNullException(nameof(req));
+
+		log.LogInformation("Status processed a request.");
 
 		var version = Assembly.GetExecutingAssembly().GetName().Version;
 		return new OkObjectResult($"APPLICATION RUNNING - v{version}");
