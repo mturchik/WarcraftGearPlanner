@@ -12,6 +12,7 @@ public class ItemSubclassProfile : Profile
 		CreateMap<ItemSubclassEntity, ItemSubclass>().IncludeBase<BaseEntity, BaseModel>();
 		CreateMap<ItemSubclass, ItemSubclassEntity>().IncludeBase<BaseModel, BaseEntity>()
 			.ForMember(e => e.ItemClassId, opt => opt.Ignore())
-			.ForMember(e => e.ItemClass, opt => opt.Ignore());
+			.ForMember(e => e.ItemClass, opt => opt.Ignore())
+			.ForMember(e => e.Items, opt => opt.Ignore());
 	}
 }
