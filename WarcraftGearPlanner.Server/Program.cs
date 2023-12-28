@@ -6,6 +6,9 @@ using System.Text.Json.Serialization;
 using WarcraftGearPlanner.Server.Data;
 using WarcraftGearPlanner.Server.Data.Entities;
 using WarcraftGearPlanner.Server.Data.Repositories;
+using WarcraftGearPlanner.Server.Services.InventoryTypes;
+using WarcraftGearPlanner.Server.Services.ItemClasses;
+using WarcraftGearPlanner.Server.Services.ItemQualities;
 using WarcraftGearPlanner.Server.Services.Items;
 using WarcraftGearPlanner.Server.Services.Realms;
 using WarcraftGearPlanner.Shared.Models.Items;
@@ -21,12 +24,19 @@ builder.Services.AddDbContext<ApplicationDbContext>(contextOptions =>
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
+
+builder.Services.AddScoped<IInventoryTypeService, InventoryTypeService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IItemClassService, ItemClassService>();
+builder.Services.AddScoped<IItemQualityService, ItemQualityService>();
 builder.Services.AddScoped<IRealmService, RealmService>();
+
+builder.Services.AddScoped<IValidator<InventoryType>, InventoryTypeValidator>();
 builder.Services.AddScoped<IValidator<Item>, ItemValidator>();
 builder.Services.AddScoped<IValidator<ItemClass>, ItemClassValidator>();
+builder.Services.AddScoped<IValidator<ItemQuality>, ItemQualityValidator>();
 builder.Services.AddScoped<IValidator<Realm>, RealmValidator>();
+
 builder.Services.AddScoped<IRepository<ItemEntity>, ItemRepository>();
 builder.Services.AddScoped<IRepository<ItemQualityEntity>, ItemQualityRepository>();
 builder.Services.AddScoped<IRepository<InventoryTypeEntity>, InventoryTypeRepository>();

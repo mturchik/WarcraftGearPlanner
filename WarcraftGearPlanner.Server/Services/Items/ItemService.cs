@@ -16,6 +16,8 @@ public class ItemService(
 	IRepository<InventoryTypeEntity> inventoryTypeRepository
 ) : BaseService<Item, ItemEntity>(repository, validator, memoryCache, mapper), IItemService
 {
+	private readonly IRepository<ItemQualityEntity> itemQualityRepository = itemQualityRepository;
+	private readonly IRepository<InventoryTypeEntity> inventoryTypeRepository = inventoryTypeRepository;
 
 	public async Task<List<Item>> MergeSearchResults(List<Item> models)
 	{
