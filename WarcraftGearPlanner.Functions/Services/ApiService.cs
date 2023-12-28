@@ -17,10 +17,10 @@ public class ApiService : IApiService
 		_apiUrl = Environment.GetEnvironmentVariable("API_URL")
 			?? throw new ApplicationException("API_URL environment variable is not set");
 
-		var auth = new EnvironmentCredential();
-		var clientId = Environment.GetEnvironmentVariable("AZURE_CLIENT_ID")
-			?? throw new ApplicationException("AZURE_CLIENT_ID environment variable is not set");
-		var accessToken = auth.GetToken(new TokenRequestContext(new[] { $"api://{clientId}/.default" }));
+		var clientId = Environment.GetEnvironmentVariable("API_CLIENT_ID")
+			?? throw new ApplicationException("API_CLIENT_ID environment variable is not set");
+		var accessToken = new EnvironmentCredential()
+			.GetToken(new TokenRequestContext(new[] { $"api://{clientId}/.default" }));
 		_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.Token);
 	}
 
