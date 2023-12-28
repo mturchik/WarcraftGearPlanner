@@ -6,12 +6,13 @@ jobs:
   build-and-deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest 
+    environment:
+      name: 'PROD - FUNC'
+      url: 'https://wgp-func.azurewebsites.net'
     env:
       AZURE_FUNCTIONAPP_PACKAGE_PATH: 'WarcraftGearPlanner.Functions'
       DOTNET_CONFIG: 'Release'
       DOTNET_VERSION: '6.0.x'
-      name: 'PROD - FUNC'
-      url: 'https://wgp-func.azurewebsites.net'
 
     steps:
       - name: Checkout Repository
