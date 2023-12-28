@@ -14,7 +14,7 @@ jobs:
       url: 'https://wgp-func.azurewebsites.net'
 
     steps:
-      - name: 'Checkout GitHub Action'
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: .NET Setup ${{ env.DOTNET_VERSION }} Environment
@@ -29,9 +29,9 @@ jobs:
           dotnet build --configuration ${{ env.DOTNET_CONFIG }} --output ./output
           popd
 
-      - name: 'Run Azure Functions Action'
+      - name: Deploy to Azure Function
         uses: Azure/functions-action@v1.5.1
-        id: deploy-tofa
+        id: deploy-to-fa
         with:
           app-name: 'wgp-func'
           slot-name: 'Production'
