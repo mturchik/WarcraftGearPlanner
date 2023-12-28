@@ -2,27 +2,19 @@
 
 public class ItemSearchParameters : BaseSearchParameters
 {
-	public string? Name { get; set; }
-	public int? MinItemLevel { get; set; }
-	public int? MaxItemLevel { get; set; }
-	public int? MinReqLevel { get; set; }
-	public int? MaxReqLevel { get; set; }
+	public int? MinId { get; set; }
+	public int? MaxId { get; set; }
 	public int? ItemClassId { get; set; }
 	public int? ItemSubclassId { get; set; }
-	public int? InventoryTypeId { get; set; }
+	public string? InventoryType { get; set; }
+	public string? Quality { get; set; }
 
 	public override List<string> ToCriterium()
 	{
 		var criterium = new List<string>();
 
-		if (!string.IsNullOrWhiteSpace(Name))
-			criterium.Add($"name.en_US={Name}");
-
-		if (MinItemLevel.HasValue || MaxItemLevel.HasValue)
-			criterium.Add($"level=[{MinItemLevel},{MaxItemLevel}]");
-
-		if (MinReqLevel.HasValue || MaxReqLevel.HasValue)
-			criterium.Add($"required_level=[{MinReqLevel},{MaxReqLevel}]");
+		if (MinId.HasValue || MaxId.HasValue)
+			criterium.Add($"id=[{MinId},{MaxId}]");
 
 		if (ItemClassId.HasValue)
 			criterium.Add($"item_class.id={ItemClassId}");
@@ -30,8 +22,11 @@ public class ItemSearchParameters : BaseSearchParameters
 		if (ItemSubclassId.HasValue)
 			criterium.Add($"item_subclass.id={ItemSubclassId}");
 
-		if (InventoryTypeId.HasValue)
-			criterium.Add($"inventory_type.id={InventoryTypeId}");
+		if (!string.IsNullOrEmpty(InventoryType))
+			criterium.Add($"inventory_type.type={InventoryType}");
+
+		if (!string.IsNullOrEmpty(Quality))
+			criterium.Add($"quality.type={Quality}");
 
 		return criterium;
 	}

@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Azure.Identity;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using WarcraftGearPlanner.Functions.Extensions;
@@ -23,12 +24,18 @@ public class ApiService : IApiService
 		_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.Token);
 	}
 
-	public Task Delete(string url) => _httpClient.DeleteAsync(_apiUrl + url);
+	public async Task Delete(string url)
+	{
+		var response = await _httpClient.DeleteAsync(_apiUrl + url);
+
+		_ = await HandleResponse<object>(response);
+	}
 
 	public async Task<T?> Get<T>(string url)
 	{
 		var response = await _httpClient.GetAsync(_apiUrl + url);
-		var obj = await response.ConvertResponse<T>();
+
+		var obj = await HandleResponse<T>(response);
 		return obj;
 	}
 
@@ -36,7 +43,8 @@ public class ApiService : IApiService
 	{
 		var content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
 		var response = await _httpClient.PostAsync(_apiUrl + url, content);
-		var obj = await response.ConvertResponse<T>();
+
+		var obj = await HandleResponse<T>(response);
 		return obj;
 	}
 
@@ -44,8 +52,17 @@ public class ApiService : IApiService
 	{
 		var content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
 		var response = await _httpClient.PutAsync(_apiUrl + url, content);
-		var obj = await response.ConvertResponse<T>();
+
+		var obj = await HandleResponse<T>(response);
 		return obj;
 	}
 
+	private static async Task<T?> HandleResponse<T>(HttpResponseMessage response)
+	{
+		if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.NotFound)
+			throw new ApplicationException($"Error calling API: {response.StatusCode} {response.ReasonPhrase}");
+
+		var obj = await response.ConvertResponse<T>();
+		return obj;
+	}
 }

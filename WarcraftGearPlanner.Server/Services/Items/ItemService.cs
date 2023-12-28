@@ -16,6 +16,8 @@ public class ItemService(
 	IRepository<InventoryTypeEntity> inventoryTypeRepository
 ) : BaseService<Item, ItemEntity>(repository, validator, memoryCache, mapper), IItemService
 {
+	private readonly IRepository<ItemQualityEntity> itemQualityRepository = itemQualityRepository;
+	private readonly IRepository<InventoryTypeEntity> inventoryTypeRepository = inventoryTypeRepository;
 
 	public async Task<List<Item>> MergeSearchResults(List<Item> models)
 	{
@@ -79,7 +81,7 @@ public class ItemService(
 				Type = i.ItemQualityType ?? "",
 				Name = i.ItemQualityName ?? ""
 			})
-			.DistinctBy(q => q.Type)
+			.DistinctBy(q => $"{q.Type}-{q.Name}")
 			.ToList();
 
 		var types = itemQualities.Select(m => m.Type).ToList();
@@ -102,7 +104,7 @@ public class ItemService(
 				Type = i.InventoryTypeType ?? "",
 				Name = i.InventoryTypeName ?? ""
 			})
-			.DistinctBy(q => q.Type)
+			.DistinctBy(q => $"{q.Type}-{q.Name}")
 			.ToList();
 
 		var types = inventoryTypes.Select(m => m.Type).ToList();

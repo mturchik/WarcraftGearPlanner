@@ -9,7 +9,10 @@
       "enableLiveMetricsFilters": true
     }
   },
-  "serviceBus": {
-    "maxConcurrentCalls": 3
+  "extensions": {
+    "serviceBus": {
+      "messageHandlerOptions": { "maxConcurrentCalls": 5 },
+      "sessionHandlerOptions": { "maxConcurrentSessions": 3 }
+    }
   }
 }

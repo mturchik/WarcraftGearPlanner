@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WarcraftGearPlanner.Server.Services.Items;
+using WarcraftGearPlanner.Server.Services.ItemClasses;
 using WarcraftGearPlanner.Shared.Models.Items;
 
 namespace WarcraftGearPlanner.Server.Controllers;
