@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using WarcraftGearPlanner.Functions.Services;
 using ItemClassDTO = WarcraftGearPlanner.Shared.Models.Items.ItemClass;
@@ -20,9 +22,9 @@ public class ValidateReferenceTables
 	}
 
 	[FunctionName("ValidateReferenceTables")]
-	public async Task Run([TimerTrigger("0 0 0 * * 0")] TimerInfo myTimer, ILogger logger)
+	public async Task Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequest req, ILogger logger)
 	{
-		if (myTimer is null) throw new ArgumentNullException(nameof(myTimer));
+		if (req is null) throw new ArgumentNullException(nameof(req));
 
 		_logger = logger;
 		_logger.LogInformation($"ValidateReferenceTables executed at: {DateTime.Now}");
@@ -132,14 +134,14 @@ public class ValidateReferenceTables
 					HideTooltip = s?.HideTooltip ?? false
 				}).ToList();
 
+			itemClassDTO.Subclasses ??= new();
 			var existingItemClass = existing.FirstOrDefault(e => e.ClassId == itemClassDTO.ClassId);
 			if (existingItemClass is null)
-				itemClassDTO.Subclasses = itemSubclassDTOs;
+				itemClassDTO.Subclasses.AddRange(itemSubclassDTOs);
 			else
 			{
 				itemClassDTO.Id = existingItemClass.Id;
 				var subclassChanges = false;
-				itemClassDTO.Subclasses ??= new();
 				foreach (var itemSubclassDTO in itemSubclassDTOs)
 				{
 					var existingItemSubclass = existingItemClass.Subclasses?.FirstOrDefault(s => s.SubclassId == itemSubclassDTO.SubclassId);
