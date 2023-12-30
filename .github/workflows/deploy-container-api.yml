@@ -17,9 +17,6 @@ jobs:
     permissions: 
       id-token: write #This is required for requesting the OIDC JWT Token
       contents: read #Required when GH token is used to authenticate with private repo
-    environment:
-      name: 'PROD - API'
-      url: 'https://wgp-api.azurewebsites.net'
 
     steps:
       - name: Checkout to the branch
