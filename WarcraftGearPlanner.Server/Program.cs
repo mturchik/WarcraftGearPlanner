@@ -16,13 +16,11 @@ using WarcraftGearPlanner.Shared.Models.Realms;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddDbContext<ApplicationDbContext>(contextOptions =>
-{
-	var connString = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")
-		?? builder.Configuration.GetValue<string>("wgp-sql-db-conn-string");
-	contextOptions.UseSqlServer(connString, sqlOptions => sqlOptions.EnableRetryOnFailure(2));
-});
+	contextOptions.UseSqlServer(
+		builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING"),
+		sqlOptions => sqlOptions.EnableRetryOnFailure(3))
+);
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
