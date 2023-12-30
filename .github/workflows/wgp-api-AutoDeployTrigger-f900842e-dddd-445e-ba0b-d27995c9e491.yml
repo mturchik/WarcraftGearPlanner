@@ -34,13 +34,13 @@ jobs:
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
-          appSourcePath: ${{ github.workspace }}/WarcraftGearPlanner.Server 
+          appSourcePath: ${{ github.workspace }}
           registryUrl: docker.io
           registryUsername: ${{ secrets.WGPAPI_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.WGPAPI_REGISTRY_PASSWORD }}
           containerAppName: wgp-api
           resourceGroup: warcraft-gear-planner
           imageToBuild: mturchik/wgp-api:${{ github.sha }}
-          dockerfilePath: Dockerfile
+          dockerfilePath: WarcraftGearPlanner.Server/Dockerfile
 
 
