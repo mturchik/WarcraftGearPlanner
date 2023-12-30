@@ -1,6 +1,5 @@
-name: Build and Deploy - Azure Function App
+name: Azure - Function App
 on:
-  # Automatically trigger it when detected changes in repo
   push:
     branches: [master]
     paths:
@@ -15,9 +14,31 @@ on:
       - ".github/workflows/deploy-azure-func.yml"
 
 jobs:
-  build-and-deploy:
-    name: Build and Deploy
+  build-and-test:
+    name: Build & Test
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    env:
+      DOTNET_PROJECT: "WarcraftGearPlanner.Functions/WarcraftGearPlanner.Functions.csproj"
+      DOTNET_CONFIG: "Release"
+      DOTNET_VERSION: "6.0.x"
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: .NET Setup ${{ env.DOTNET_VERSION }} Environment
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: .NET Build
+        run: dotnet build ${{ env.DOTNET_PROJECT }} -c ${{ env.DOTNET_CONFIG }}
+
+  build-and-deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     env:
       AZURE_FUNCTIONAPP_PACKAGE_PATH: "WarcraftGearPlanner.Functions"
       DOTNET_CONFIG: "Release"
@@ -36,7 +57,7 @@ jobs:
         shell: bash
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          dotnet build --configuration ${{ env.DOTNET_CONFIG }} --output ./output
+          dotnet build -c ${{ env.DOTNET_CONFIG }} --output ./output
           popd
 
       - name: Deploy to Azure Function

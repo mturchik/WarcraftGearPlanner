@@ -1,4 +1,4 @@
-name: Build and Deploy - Azure Container App
+name: Azure - Container App
 on:
   push:
     branches: [master]
@@ -15,14 +15,13 @@ on:
 
 jobs:
   build-and-test:
-    name: Build
+    name: Build & Test
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     env:
       DOTNET_PROJECT: "WarcraftGearPlanner.Server/WarcraftGearPlanner.Server.csproj"
       DOTNET_CONFIG: "Release"
       DOTNET_VERSION: "8.0.x"
-      DOTNET_ROOT: "/home/runner/.dotnet"
 
     steps:
       - name: Checkout Repository
@@ -37,7 +36,7 @@ jobs:
         run: dotnet build ${{ env.DOTNET_PROJECT }} -c ${{ env.DOTNET_CONFIG }}
 
   build-and-deploy:
-    name: Build and Deploy
+    name: Build & Deploy
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     permissions:
