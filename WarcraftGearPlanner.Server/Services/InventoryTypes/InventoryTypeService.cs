@@ -8,10 +8,10 @@ using WarcraftGearPlanner.Shared.Models.Items;
 namespace WarcraftGearPlanner.Server.Services.InventoryTypes;
 
 public class InventoryTypeService(
-    IRepository<InventoryTypeEntity> repository,
-    IValidator<InventoryType> validator,
-    IMemoryCache memoryCache,
-    IMapper mapper
+	IRepository<InventoryTypeEntity> repository,
+	IValidator<InventoryType> validator,
+	IMemoryCache memoryCache,
+	IMapper mapper
 ) : BaseService<InventoryType, InventoryTypeEntity>(repository, validator, memoryCache, mapper), IInventoryTypeService
 {
 }

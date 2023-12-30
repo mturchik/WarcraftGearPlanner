@@ -2,38 +2,37 @@
 
 #nullable disable
 
-namespace WarcraftGearPlanner.Server.Migrations
+namespace WarcraftGearPlanner.Server.Migrations;
+
+/// <inheritdoc />
+public partial class UpdateItemClassEntityVerboseTooltip : Migration
 {
-    /// <inheritdoc />
-    public partial class UpdateItemClassEntityVerboseTooltip : Migration
-    {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<bool>(
-                name: "HideTooltip",
-                table: "ItemSubclasses",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
+	/// <inheritdoc />
+	protected override void Up(MigrationBuilder migrationBuilder)
+	{
+		migrationBuilder.AddColumn<bool>(
+			name: "HideTooltip",
+			table: "ItemSubclasses",
+			type: "bit",
+			nullable: false,
+			defaultValue: false);
 
-            migrationBuilder.AddColumn<string>(
-                name: "VerboseName",
-                table: "ItemSubclasses",
-                type: "nvarchar(max)",
-                nullable: true);
-        }
+		migrationBuilder.AddColumn<string>(
+			name: "VerboseName",
+			table: "ItemSubclasses",
+			type: "nvarchar(max)",
+			nullable: true);
+	}
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "HideTooltip",
-                table: "ItemSubclasses");
+	/// <inheritdoc />
+	protected override void Down(MigrationBuilder migrationBuilder)
+	{
+		migrationBuilder.DropColumn(
+			name: "HideTooltip",
+			table: "ItemSubclasses");
 
-            migrationBuilder.DropColumn(
-                name: "VerboseName",
-                table: "ItemSubclasses");
-        }
-    }
+		migrationBuilder.DropColumn(
+			name: "VerboseName",
+			table: "ItemSubclasses");
+	}
 }
