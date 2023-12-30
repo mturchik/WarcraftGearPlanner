@@ -1,0 +1,18 @@
+name: Build and Deploy - API Docker Image
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: 'PROD - API'
+      url: 'https://wgp-api.azurewebsites.net'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+  
+      - name: Build the Docker Image
+        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
