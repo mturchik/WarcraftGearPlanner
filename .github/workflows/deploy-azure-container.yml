@@ -12,6 +12,7 @@ on:
       - "WarcraftGearPlanner.Server/**"
       - "WarcraftGearPlanner.Shared/**"
       - ".github/workflows/deploy-azure-container.yml"
+  workflow_dispatch:
 
 jobs:
   build-and-test:
