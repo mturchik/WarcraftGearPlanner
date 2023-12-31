@@ -18,7 +18,7 @@ jobs:
   build-and-test:
     name: Build & Test
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master')
     env:
       DOTNET_PROJECT: "WarcraftGearPlanner.Server/WarcraftGearPlanner.Server.csproj"
       DOTNET_CONFIG: "Release"
