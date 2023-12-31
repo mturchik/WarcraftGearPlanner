@@ -11,6 +11,7 @@ public class InventoryTypeProfile : Profile
 	{
 		CreateMap<InventoryTypeEntity, InventoryType>().IncludeBase<BaseEntity, BaseModel>();
 		CreateMap<InventoryType, InventoryTypeEntity>().IncludeBase<BaseModel, BaseEntity>()
-			.ForMember(e => e.Items, opt => opt.Ignore());
+			.ForMember(e => e.Items, opt => opt.Ignore())
+			.ForMember(e => e.ItemSubclassInventoryTypes, opt => opt.Ignore());
 	}
 }

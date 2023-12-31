@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure.Identity;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -20,13 +19,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddDbContext<ApplicationDbContext>(contextOptions =>
+{
 	contextOptions.UseSqlServer(
 		builder.Configuration.GetValue<string>("AZURE_SQL_CONNECTIONSTRING"),
-		sqlOptions => sqlOptions.EnableRetryOnFailure(3))
-);
+		sqlOptions =>
+		{
+			sqlOptions.EnableRetryOnFailure(3);
+			sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+		}
+	);
+});
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddHttpClient();
-builder.Services.AddMemoryCache();
+builder.Services.AddMemoryCache(cacheOptions =>
+{
+	cacheOptions.TrackStatistics = true;
+});
 builder.Services.AddOpenTelemetry().UseAzureMonitor();
 
 builder.Services.AddScoped<IInventoryTypeService, InventoryTypeService>();
@@ -46,6 +54,7 @@ builder.Services.AddScoped<IRepository<ItemQualityEntity>, ItemQualityRepository
 builder.Services.AddScoped<IRepository<InventoryTypeEntity>, InventoryTypeRepository>();
 builder.Services.AddScoped<IRepository<ItemClassEntity>, ItemClassRepository>();
 builder.Services.AddScoped<IRepository<ItemSubclassEntity>, ItemSubclassRepository>();
+builder.Services.AddScoped<IRepository<ItemSubclassInventoryTypeEntity>, ItemSubclassInventoryTypeRepository>();
 builder.Services.AddScoped<IRepository<RealmEntity>, RealmRepository>();
 
 builder.Services

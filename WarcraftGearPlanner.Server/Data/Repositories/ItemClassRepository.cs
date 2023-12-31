@@ -9,7 +9,7 @@ public class ItemClassRepository(ApplicationDbContext context) : Repository<Item
 	public override async Task<ItemClassEntity?> GetByIdAsync(Guid id)
 	{
 		var entity = await TableQuery
-			.Include(x => x.Subclasses)
+			.Include(x => x.Subclasses)!.ThenInclude(x => x.ItemSubclassInventoryTypes)!.ThenInclude(x => x.InventoryType)
 			.FirstOrDefaultAsync(x => x.Id == id);
 		return entity;
 	}
@@ -20,7 +20,7 @@ public class ItemClassRepository(ApplicationDbContext context) : Repository<Item
 		if (selector is not null) query = query.Where(selector);
 
 		var entities = await query
-			.Include(x => x.Subclasses)
+			.Include(x => x.Subclasses)!.ThenInclude(x => x.ItemSubclassInventoryTypes)!.ThenInclude(x => x.InventoryType)
 			.ToListAsync();
 		return entities;
 	}

@@ -5,4 +5,5 @@ public class ItemSubclass : BaseModel
 	public string? Name { get; set; }
 	public string? VerboseName { get; set; }
 	public bool HideTooltip { get; set; }
+	public List<InventoryType>? InventoryTypes { get; set; }
 }
