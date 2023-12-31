@@ -18,22 +18,16 @@ using WarcraftGearPlanner.Shared.Models.Realms;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddDbContext<ApplicationDbContext>(contextOptions =>
 	contextOptions.UseSqlServer(
-		builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING"),
+		builder.Configuration.GetValue<string>("AZURE_SQL_CONNECTIONSTRING"),
 		sqlOptions => sqlOptions.EnableRetryOnFailure(3))
 );
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
-builder.Services.AddOpenTelemetry().UseAzureMonitor(monitorOptions =>
-{
-	monitorOptions.SamplingRatio = 0.75F;
-	monitorOptions.ConnectionString = builder.Configuration.GetSection("AzureMonitor")["ConnectionString"];
-	monitorOptions.Credential = builder.Environment.IsDevelopment()
-		? new DefaultAzureCredential()
-		: new ManagedIdentityCredential();
-});
+builder.Services.AddOpenTelemetry().UseAzureMonitor();
 
 builder.Services.AddScoped<IInventoryTypeService, InventoryTypeService>();
 builder.Services.AddScoped<IItemService, ItemService>();
