@@ -17,4 +17,7 @@ public class ItemSubclassEntity : BaseEntity
 
 	[InverseProperty(nameof(ItemEntity.ItemSubclass))]
 	public List<ItemEntity>? Items { get; set; }
+
+	[InverseProperty(nameof(ItemSubclassInventoryTypeEntity.ItemSubclass))]
+	public List<ItemSubclassInventoryTypeEntity>? ItemSubclassInventoryTypes { get; set; }
 }

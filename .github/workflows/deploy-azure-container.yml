@@ -66,4 +66,4 @@ jobs:
           resourceGroup: warcraft-gear-planner
           imageToBuild: mturchik/wgp-api:${{ github.sha }}
           dockerfilePath: WarcraftGearPlanner.Server/Dockerfile
-          environmentVariables: AZURE_SQL_CONNECTIONSTRING=${{ secrets.WGPAPI_AZURE_SQL_CONNECTIONSTRING }}
+          environmentVariables: AZURE_SQL_CONNECTIONSTRING=${{ secrets.WGPAPI_AZURE_SQL_CONNECTIONSTRING }} APPLICATIONINSIGHTS_CONNECTION_STRING=${{ secrets.WGAPI_APPLICATIONINSIGHTS_CONNECTION_STRING }}

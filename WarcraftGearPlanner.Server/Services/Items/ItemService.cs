@@ -13,11 +13,13 @@ public class ItemService(
 	IMemoryCache memoryCache,
 	IMapper mapper,
 	IRepository<ItemQualityEntity> itemQualityRepository,
-	IRepository<InventoryTypeEntity> inventoryTypeRepository
+	IRepository<InventoryTypeEntity> inventoryTypeRepository,
+	IRepository<ItemSubclassInventoryTypeEntity> itemSubclassInventoryTypeRepository
 ) : BaseService<Item, ItemEntity>(repository, validator, memoryCache, mapper), IItemService
 {
 	private readonly IRepository<ItemQualityEntity> itemQualityRepository = itemQualityRepository;
 	private readonly IRepository<InventoryTypeEntity> inventoryTypeRepository = inventoryTypeRepository;
+	private readonly IRepository<ItemSubclassInventoryTypeEntity> itemSubclassInventoryTypeRepository = itemSubclassInventoryTypeRepository;
 
 	public async Task<List<Item>> MergeSearchResults(List<Item> models)
 	{
@@ -44,6 +46,8 @@ public class ItemService(
 				var inventoryType = inventoryTypes.First(t => t.Type == model.InventoryTypeType);
 				model.InventoryTypeId = inventoryType.Id;
 			}
+
+			await CheckItemSubclassInventoryTypeRelationship(inventoryTypes, model);
 
 			var entity = entities.FirstOrDefault(e => e.ItemId == model.ItemId);
 			if (entity is null)
@@ -90,6 +94,7 @@ public class ItemService(
 		var toCreate = itemQualities.Where(i => !entities.Any(e => e.Type == i.Type)).ToList();
 
 		var created = await itemQualityRepository.CreateListAsync(toCreate);
+		memoryCache.Remove(typeof(ItemQualityEntity).Name);
 
 		entities.AddRange(created);
 
@@ -113,9 +118,27 @@ public class ItemService(
 		var toCreate = inventoryTypes.Where(i => !entities.Any(e => e.Type == i.Type)).ToList();
 
 		var created = await inventoryTypeRepository.CreateListAsync(toCreate);
+		memoryCache.Remove(typeof(InventoryTypeEntity).Name);
 
 		entities.AddRange(created);
 
 		return entities;
+	}
+
+	private async Task CheckItemSubclassInventoryTypeRelationship(List<InventoryTypeEntity> inventoryTypes, Item item)
+	{
+		var inventoryType = inventoryTypes.First(t => t.Id == item.InventoryTypeId);
+		inventoryType.ItemSubclassInventoryTypes ??= [];
+
+		var existing = inventoryType.ItemSubclassInventoryTypes.FirstOrDefault(i => i.ItemSubclassId == item.ItemSubclassId);
+		if (existing is not null) return;
+
+		var itemSubclassInventoryType = new ItemSubclassInventoryTypeEntity
+		{
+			InventoryTypeId = inventoryType.Id,
+			ItemSubclassId = item.ItemSubclassId
+		};
+		await itemSubclassInventoryTypeRepository.CreateAsync(itemSubclassInventoryType);
+		memoryCache.Remove(typeof(ItemClass).Name);
 	}
 }
