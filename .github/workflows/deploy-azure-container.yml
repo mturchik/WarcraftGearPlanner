@@ -18,7 +18,7 @@ jobs:
   build-and-test:
     name: Build & Test
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master')
+    if: github.event_name == 'pull_request'
     env:
       DOTNET_PROJECT: "WarcraftGearPlanner.Server/WarcraftGearPlanner.Server.csproj"
       DOTNET_CONFIG: "Release"
@@ -39,7 +39,7 @@ jobs:
   build-and-deploy:
     name: Build & Deploy
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master')
     permissions:
       id-token: write
       contents: read
