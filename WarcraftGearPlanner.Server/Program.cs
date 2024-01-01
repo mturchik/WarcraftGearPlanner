@@ -3,6 +3,8 @@ using Azure.Monitor.OpenTelemetry.AspNetCore;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using System.Text.Json.Serialization;
 using WarcraftGearPlanner.Server.Data;
 using WarcraftGearPlanner.Server.Data.Entities;
@@ -36,6 +38,15 @@ builder.Services.AddMemoryCache(cacheOptions =>
 	cacheOptions.TrackStatistics = true;
 });
 builder.Services.AddOpenTelemetry().UseAzureMonitor();
+builder.Services.ConfigureOpenTelemetryTracerProvider((tracerBuilder) =>
+	tracerBuilder.ConfigureResource(resourceBuilder =>
+		resourceBuilder.AddAttributes(new Dictionary<string, object>() {
+			{ "service.name", "wgp-api" },
+			{ "service.namespace", "WarcraftGearPlanner.Server" },
+			{ "service.instance.id", builder.Configuration.GetValue<string>("AzureMonitor:InstanceId") ?? "MISSING" }
+		})
+	)
+);
 
 builder.Services.AddScoped<IInventoryTypeService, InventoryTypeService>();
 builder.Services.AddScoped<IItemService, ItemService>();

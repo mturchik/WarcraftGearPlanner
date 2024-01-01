@@ -8,6 +8,8 @@ using WarcraftGearPlanner.Functions.Models.Enum;
 using WarcraftGearPlanner.Functions.Models.Items;
 using WarcraftGearPlanner.Functions.Models.Realms;
 using WarcraftGearPlanner.Functions.Models.Search;
+using WarcraftGearPlanner.Functions.Models.Shared;
+using WarcraftGearPlanner.Shared.Requests.Search;
 
 namespace WarcraftGearPlanner.Functions.Services;
 
@@ -161,8 +163,8 @@ public class BattleNetService : IBattleNetService
 	public Task<ItemClassIndex?> GetItemClassIndex() => Get<ItemClassIndex>($"/data/wow/item-class/index", Namespace.Static);
 	public Task<ItemClass?> GetItemClass(int itemClassId) => Get<ItemClass>($"/data/wow/item-class/{itemClassId}", Namespace.Static);
 	public Task<ItemSubclass?> GetItemSubclass(int itemClassId, int itemSubclassId) => Get<ItemSubclass>($"/data/wow/item-class/{itemClassId}/item-subclass/{itemSubclassId}", Namespace.Static);
-	public Task<SearchResponse<ItemSearchResult>?> SearchItems(SearchRequest<ItemSearchParameters> request)
-		=> Get<SearchResponse<ItemSearchResult>>($"/data/wow/search/item{request.GetQueryString()}", Namespace.Static);
+	public Task<SearchResponse<DataReference<ItemSearchResult>>?> SearchItems(BnetSearchRequest request)
+		=> Get<SearchResponse<DataReference<ItemSearchResult>>>($"/data/wow/search/item{request.GetQueryString()}", Namespace.Static);
 
 	//public async Task<IEnumerable<Media>> GetItemMedia(int[] itemIds)
 	//{

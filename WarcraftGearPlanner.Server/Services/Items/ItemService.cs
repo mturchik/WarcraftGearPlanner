@@ -3,7 +3,9 @@ using FluentValidation;
 using Microsoft.Extensions.Caching.Memory;
 using WarcraftGearPlanner.Server.Data;
 using WarcraftGearPlanner.Server.Data.Entities;
+using WarcraftGearPlanner.Server.Requests.Search;
 using WarcraftGearPlanner.Shared.Models.Items;
+using WarcraftGearPlanner.Shared.Requests.Search;
 
 namespace WarcraftGearPlanner.Server.Services.Items;
 
@@ -20,6 +22,20 @@ public class ItemService(
 	private readonly IRepository<ItemQualityEntity> itemQualityRepository = itemQualityRepository;
 	private readonly IRepository<InventoryTypeEntity> inventoryTypeRepository = inventoryTypeRepository;
 	private readonly IRepository<ItemSubclassInventoryTypeEntity> itemSubclassInventoryTypeRepository = itemSubclassInventoryTypeRepository;
+
+	#region Search Items
+
+	public async Task<SearchResponse<Item>?> SearchItems(SearchRequest<ItemSearchParameters> searchRequest)
+	{
+		var (entities, count) = await repository.SearchAsync(searchRequest);
+		var items = mapper.Map<List<Item>>(entities);
+
+		return SearchResponse<Item>.FromRequestResults(searchRequest, items, count);
+	}
+
+	#endregion Search Items
+
+	#region Merge Search Results
 
 	public async Task<List<Item>> MergeSearchResults(List<Item> models)
 	{
@@ -139,6 +155,8 @@ public class ItemService(
 			ItemSubclassId = item.ItemSubclassId
 		};
 		await itemSubclassInventoryTypeRepository.CreateAsync(itemSubclassInventoryType);
-		memoryCache.Remove(typeof(ItemClass).Name);
+		memoryCache.Remove(typeof(ItemClassEntity).Name);
 	}
+
+	#endregion Merge Search Results
 }

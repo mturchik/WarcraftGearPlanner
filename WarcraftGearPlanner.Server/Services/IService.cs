@@ -12,6 +12,7 @@ public interface IService<TModel, TEntity>
 	Task DeleteAsync(Guid id);
 	Task DeleteListAsync(List<Guid> ids);
 	Task<TModel?> GetByIdAsync(Guid id);
+	Task<int> GetCountAsync();
 	Task<List<TModel>> GetListAsync();
 	Task<TModel> UpdateAsync(TModel model);
 	Task<List<TModel>> UpdateListAsync(List<TModel> models);

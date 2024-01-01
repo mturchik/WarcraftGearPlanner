@@ -2,11 +2,13 @@ using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using WarcraftGearPlanner.Functions.Extensions;
-using WarcraftGearPlanner.Functions.Models.Enum;
 using WarcraftGearPlanner.Functions.Models.Events;
 using WarcraftGearPlanner.Functions.Models.Items;
 using WarcraftGearPlanner.Functions.Models.Search;
+using WarcraftGearPlanner.Functions.Models.Shared;
 using WarcraftGearPlanner.Functions.Services;
+using WarcraftGearPlanner.Shared.Enum;
+using WarcraftGearPlanner.Shared.Requests.Search;
 using InventoryTypeDTO = WarcraftGearPlanner.Shared.Models.Items.InventoryType;
 using ItemDTO = WarcraftGearPlanner.Shared.Models.Items.Item;
 using ItemQualityDTO = WarcraftGearPlanner.Shared.Models.Items.ItemQuality;
@@ -45,10 +47,10 @@ public class ValidateItemsEventHandler
 
 	private async Task ProcessValidateItemsEvent(ValidateItemsEvent eventMessage)
 	{
-		var itemRequest = new SearchRequest<ItemSearchParameters>
+		var itemRequest = new BnetSearchRequest
 		{
 			Page = 1,
-			OrderBy = "id",
+			OrderProperty = "id",
 			OrderDirection = OrderDirection.Asc,
 			Parameters = new()
 			{
@@ -92,7 +94,7 @@ public class ValidateItemsEventHandler
 		}
 	}
 
-	private async Task PutItemSearchResults(ValidateItemsEvent eventMessage, SearchResponse<ItemSearchResult> searchResponse)
+	private async Task PutItemSearchResults(ValidateItemsEvent eventMessage, SearchResponse<DataReference<ItemSearchResult>> searchResponse)
 	{
 		var items = searchResponse.Results
 			.Where(s => s.Data is not null)
@@ -134,8 +136,8 @@ public class ValidateItemsEventHandler
 
 	private async Task PublishValidateItemsEvents(
 		ValidateItemsEvent eventMessage,
-		SearchRequest<ItemSearchParameters> itemRequest,
-		SearchResponse<ItemSearchResult>? searchResponse)
+		BnetSearchRequest itemRequest,
+		SearchResponse<DataReference<ItemSearchResult>>? searchResponse)
 	{
 		if (eventMessage.ItemQualityType is null)
 		{

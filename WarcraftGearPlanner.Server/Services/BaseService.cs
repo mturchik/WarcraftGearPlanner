@@ -86,6 +86,8 @@ public abstract class BaseService<TModel, TEntity>(
 		return model;
 	}
 
+	public virtual Task<int> GetCountAsync() => repository.GetCountAsync();
+
 	public virtual async Task<List<TModel>> GetListAsync()
 	{
 		var entities = memoryCache.Get<List<TEntity>>(cacheKey);

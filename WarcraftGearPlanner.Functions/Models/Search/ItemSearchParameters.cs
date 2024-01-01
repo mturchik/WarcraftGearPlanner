@@ -1,6 +1,8 @@
-﻿namespace WarcraftGearPlanner.Functions.Models.Search;
+﻿using WarcraftGearPlanner.Shared.Requests.Search;
 
-public class ItemSearchParameters : BaseSearchParameters
+namespace WarcraftGearPlanner.Functions.Models.Search;
+
+public class ItemSearchParameters : ISearchParameters
 {
 	public int? MinId { get; set; }
 	public int? MaxId { get; set; }
@@ -9,25 +11,25 @@ public class ItemSearchParameters : BaseSearchParameters
 	public string? InventoryType { get; set; }
 	public string? Quality { get; set; }
 
-	public override List<string> ToCriterium()
+	public List<string> ToQueryParameters()
 	{
-		var criterium = new List<string>();
+		var parameters = new List<string>();
 
 		if (MinId.HasValue || MaxId.HasValue)
-			criterium.Add($"id=[{MinId},{MaxId}]");
+			parameters.Add($"id=[{MinId},{MaxId}]");
 
 		if (ItemClassId.HasValue)
-			criterium.Add($"item_class.id={ItemClassId}");
+			parameters.Add($"item_class.id={ItemClassId}");
 
 		if (ItemSubclassId.HasValue)
-			criterium.Add($"item_subclass.id={ItemSubclassId}");
+			parameters.Add($"item_subclass.id={ItemSubclassId}");
 
 		if (!string.IsNullOrEmpty(InventoryType))
-			criterium.Add($"inventory_type.type={InventoryType}");
+			parameters.Add($"inventory_type.type={InventoryType}");
 
 		if (!string.IsNullOrEmpty(Quality))
-			criterium.Add($"quality.type={Quality}");
+			parameters.Add($"quality.type={Quality}");
 
-		return criterium;
+		return parameters;
 	}
 }
