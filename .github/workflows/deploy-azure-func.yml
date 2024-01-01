@@ -35,15 +35,13 @@ jobs:
 
       - name: .NET Build
         run: |
-          pushd './${{ env.DOTNET_PROJECT_DIRECTORY }}'
+          cd ${{ env.DOTNET_PROJECT_DIRECTORY }}
           dotnet build -c ${{ env.DOTNET_CONFIG }}
-          popd
 
       - name: .NET Test
         run: |
-          pushd './${{ env.DOTNET_TESTS_DIRECTORY }}'
+          cd ${{ env.DOTNET_TESTS_DIRECTORY }}
           dotnet test -c ${{ env.DOTNET_CONFIG }}
-          popd
 
   build-and-deploy:
     name: Build & Deploy
