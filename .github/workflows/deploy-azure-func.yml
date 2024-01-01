@@ -19,7 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     env:
-      DOTNET_PROJECT: "WarcraftGearPlanner.Functions/WarcraftGearPlanner.Functions.csproj"
+      DOTNET_PROJECT_DIRECTORY: "WarcraftGearPlanner.Functions"
+      DOTNET_TESTS_DIRECTORY: "WarcraftGearPlanner.Functions.Tests"
       DOTNET_CONFIG: "Release"
       DOTNET_VERSION: "6.0.x"
 
@@ -33,7 +34,16 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: .NET Build
-        run: dotnet build ${{ env.DOTNET_PROJECT }} -c ${{ env.DOTNET_CONFIG }}
+        run: |
+          pushd './${{ env.DOTNET_PROJECT_DIRECTORY }}'
+          dotnet build -c ${{ env.DOTNET_CONFIG }}
+          popd
+
+      - name: .NET Test
+        run: |
+          pushd './${{ env.DOTNET_TESTS_DIRECTORY }}'
+          dotnet test -c ${{ env.DOTNET_CONFIG }}
+          popd
 
   build-and-deploy:
     name: Build & Deploy
