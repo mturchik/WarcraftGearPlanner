@@ -19,6 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarcraftGearPlanner.Functio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarcraftGearPlanner.Shared", "WarcraftGearPlanner.Shared\WarcraftGearPlanner.Shared.csproj", "{72558936-216F-4D6B-AF7B-60CDF8E3D332}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarcraftGearPlanner.Functions.Tests", "WarcraftGearPlanner.Functions.Tests\WarcraftGearPlanner.Functions.Tests.csproj", "{AE672EFF-69D5-4FB7-8D45-1F3110784611}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarcraftGearPlanner.Tests", "WarcraftGearPlanner.Tests\WarcraftGearPlanner.Tests.csproj", "{BF04CF8A-82F3-46EC-91D5-0B99BDA33894}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarcraftGearPlanner.Server.Tests", "WarcraftGearPlanner.Server.Tests\WarcraftGearPlanner.Server.Tests.csproj", "{0439C07D-208F-4CAF-9824-32FC052067A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +43,18 @@ Global
 		{72558936-216F-4D6B-AF7B-60CDF8E3D332}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72558936-216F-4D6B-AF7B-60CDF8E3D332}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72558936-216F-4D6B-AF7B-60CDF8E3D332}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE672EFF-69D5-4FB7-8D45-1F3110784611}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE672EFF-69D5-4FB7-8D45-1F3110784611}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE672EFF-69D5-4FB7-8D45-1F3110784611}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE672EFF-69D5-4FB7-8D45-1F3110784611}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF04CF8A-82F3-46EC-91D5-0B99BDA33894}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF04CF8A-82F3-46EC-91D5-0B99BDA33894}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF04CF8A-82F3-46EC-91D5-0B99BDA33894}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF04CF8A-82F3-46EC-91D5-0B99BDA33894}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0439C07D-208F-4CAF-9824-32FC052067A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0439C07D-208F-4CAF-9824-32FC052067A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0439C07D-208F-4CAF-9824-32FC052067A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0439C07D-208F-4CAF-9824-32FC052067A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

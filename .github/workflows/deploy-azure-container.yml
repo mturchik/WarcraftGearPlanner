@@ -20,7 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     env:
-      DOTNET_PROJECT: "WarcraftGearPlanner.Server/WarcraftGearPlanner.Server.csproj"
+      DOTNET_PROJECT_DIRECTORY: "WarcraftGearPlanner.Server"
+      DOTNET_TESTS_DIRECTORY: "WarcraftGearPlanner.Server.Tests"
       DOTNET_CONFIG: "Release"
       DOTNET_VERSION: "8.0.x"
 
@@ -34,7 +35,14 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: .NET Build
-        run: dotnet build ${{ env.DOTNET_PROJECT }} -c ${{ env.DOTNET_CONFIG }}
+        run: |
+          cd ${{ env.DOTNET_PROJECT_DIRECTORY }}
+          dotnet build -c ${{ env.DOTNET_CONFIG }}
+
+      - name: .NET Test
+        run: |
+          cd ${{ env.DOTNET_TESTS_DIRECTORY }}
+          dotnet test -c ${{ env.DOTNET_CONFIG }}
 
   build-and-deploy:
     name: Build & Deploy

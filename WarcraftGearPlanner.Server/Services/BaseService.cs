@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.Extensions.Caching.Memory;
-using System.Linq.Expressions;
 using WarcraftGearPlanner.Server.Data;
 using WarcraftGearPlanner.Server.Data.Entities;
 using WarcraftGearPlanner.Shared.Models;
@@ -63,42 +62,40 @@ public abstract class BaseService<TModel, TEntity>(
 	public virtual async Task DeleteAsync(Guid id)
 	{
 		var entity = await repository.GetByIdAsync(id);
+		if (entity is null) return;
 
-		if (entity is not null)
-			await repository.DeleteAsync(entity);
-
+		await repository.DeleteAsync(entity);
 		memoryCache.Remove(cacheKey);
 	}
 
 	public virtual async Task DeleteListAsync(List<Guid> ids)
 	{
 		var entities = await repository.GetListAsync(e => ids.Contains(e.Id));
+		if (entities.Count <= 0) return;
 
-		if (entities.Count > 0)
-			await repository.DeleteListAsync(entities);
-
+		await repository.DeleteListAsync(entities);
 		memoryCache.Remove(cacheKey);
-	}
-
-	public virtual async Task<TModel?> GetAsync(Expression<Func<TEntity, bool>> selector)
-	{
-		var entity = await repository.GetAsync(selector);
-		var model = mapper.Map<TModel>(entity);
-		return model;
 	}
 
 	public virtual async Task<TModel?> GetByIdAsync(Guid id)
 	{
 		var entity = await repository.GetByIdAsync(id);
+		if (entity is null) return null;
+
 		var model = mapper.Map<TModel>(entity);
 		return model;
 	}
 
 	public virtual async Task<List<TModel>> GetListAsync()
 	{
-		var entities = await memoryCache.GetOrCreateAsync(cacheKey, entry => repository.GetListAsync());
+		var entities = memoryCache.Get<List<TEntity>>(cacheKey);
+		if (entities is null)
+		{
+			entities = await repository.GetListAsync();
+			memoryCache.Set(cacheKey, entities);
+		}
 
-		var models = mapper.Map<List<TModel>>(entities ?? []);
+		var models = mapper.Map<List<TModel>>(entities);
 		return models;
 	}
 
