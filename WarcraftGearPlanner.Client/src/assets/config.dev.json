@@ -1,0 +1,7 @@
+{
+  "baseUrls": {
+    "wgp-api": "https://localhost:7052",
+    "wgp-func": "https://warcraft-gear-planner.azurewebsites.net"
+  },
+  "environment": "dev"
+}

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderComponent } from './layout/header/header.component';
+import { ConfigService } from './shared/config/config.service';
 
 @Component({
   standalone: true,
@@ -10,4 +11,10 @@ import { HeaderComponent } from './layout/header/header.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {}
+export class AppComponent implements OnInit {
+  constructor(private _configService: ConfigService) {}
+
+  ngOnInit(): void {
+    this._configService.loadConfig();
+  }
+}

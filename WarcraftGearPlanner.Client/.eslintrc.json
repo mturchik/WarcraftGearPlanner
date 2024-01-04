@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": ["!**/*"],
-  "plugins": ["@nx"],
+  "plugins": ["@nx", "@typescript-eslint"],
   "overrides": [
     {
       "files": ["*.ts"],
@@ -24,6 +24,43 @@
             "type": "element",
             "prefix": "warcraft-gear-planner",
             "style": "kebab-case"
+          }
+        ],
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": "default",
+            "format": ["camelCase"],
+            "leadingUnderscore": "allow",
+            "trailingUnderscore": "allow"
+          },
+          {
+            "selector": "import",
+            "format": ["camelCase", "PascalCase"]
+          },
+          {
+            "selector": "variable",
+            "format": ["camelCase", "UPPER_CASE"],
+            "leadingUnderscore": "allow",
+            "trailingUnderscore": "allow"
+          },
+          {
+            "selector": "typeLike",
+            "format": ["PascalCase"]
+          },
+          {
+            "selector": "memberLike",
+            "modifiers": ["private"],
+            "format": ["camelCase"],
+            "leadingUnderscore": "require"
+          },
+          {
+            "selector": "enumMember",
+            "format": ["PascalCase", "UPPER_CASE"]
+          },
+          {
+            "selector": "function",
+            "format": ["camelCase"]
           }
         ]
       }

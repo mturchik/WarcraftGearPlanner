@@ -1,0 +1,60 @@
+<form [formGroup]="form" class="row" (ngSubmit)="search()">
+  <div class="col-12 col-md-4">
+    <label for="name" class="form-label">Name</label>
+    <input
+      type="text"
+      class="form-control"
+      formControlName="name"
+      placeholder="Search by Item Name" />
+  </div>
+
+  <div class="col-12 col-md-4" *ngIf="itemQualities.length">
+    <label for="itemQuality" class="form-label">Item Quality</label>
+    <select formControlName="itemQuality" class="form-select">
+      <option value="">Select Item Quality</option>
+      <option
+        *ngFor="let itemQuality of itemQualities"
+        [value]="itemQuality.id">
+        {{ itemQuality.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="col-12 col-md-4" *ngIf="itemClasses.length">
+    <label for="itemClass" class="form-label">Item Class</label>
+    <select formControlName="itemClass" class="form-select">
+      <option value="">Select Item Class</option>
+      <option *ngFor="let itemClass of itemClasses" [value]="itemClass.id">
+        {{ itemClass.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="col-12 col-md-4" *ngIf="itemSubclasses.length">
+    <label for="itemSubclass" class="form-label">Item Sub-Class</label>
+    <select formControlName="itemSubclass" class="form-select">
+      <option value="">Select Item Sub-Class</option>
+      <option
+        *ngFor="let itemSubclass of itemSubclasses"
+        [value]="itemSubclass.id">
+        {{ itemSubclass.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="col-12 col-md-4" *ngIf="filteredInventoryTypes.length">
+    <label for="inventoryType" class="form-label">Inventory Type</label>
+    <select formControlName="inventoryType" class="form-select">
+      <option value="">Select Inventory Type</option>
+      <option
+        *ngFor="let inventoryType of filteredInventoryTypes"
+        [value]="inventoryType.id">
+        {{ inventoryType.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </div>
+</form>

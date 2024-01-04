@@ -1,0 +1,7 @@
+{
+  "baseUrls": {
+    "wgp-api": "https://warcraft-gear-planner.azurewebsites.net",
+    "wgp-func": "https://warcraft-gear-planner.azurewebsites.net"
+  },
+  "environment": "prod"
+}

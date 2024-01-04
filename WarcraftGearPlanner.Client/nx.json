@@ -59,6 +59,9 @@
     },
     "@nx/angular:component": {
       "style": "scss"
+    },
+    "@schematics/angular:component": {
+      "style": "scss"
     }
   },
   "defaultProject": "warcraft-gear-planner",

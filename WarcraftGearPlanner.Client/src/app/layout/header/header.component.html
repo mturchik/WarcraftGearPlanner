@@ -3,21 +3,32 @@
     <button
       class="navbar-toggler"
       type="button"
-      (click)="isCollapsed = !isCollapsed"
-    >
+      (click)="isCollapsed = !isCollapsed">
       <span class="navbar-toggler-icon"></span>
     </button>
     <a class="navbar-brand" routerLink="/">WarcraftGearPlanner</a>
     <div class="navbar-collapse" [collapse]="isCollapsed">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" routerLink="/">Home</a>
+          <a class="nav-link" routerLinkActive="active" routerLink="/">
+            Home
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" routerLinkActive="active">Search</a>
+          <a
+            class="nav-link"
+            routerLinkActive="active"
+            routerLink="/item-search">
+            Search
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" routerLinkActive="active">Planner</a>
+          <a
+            class="nav-link disabled"
+            routerLinkActive="active"
+            routerLinkActive="/gear-planner">
+            Planner
+          </a>
         </li>
       </ul>
     </div>
