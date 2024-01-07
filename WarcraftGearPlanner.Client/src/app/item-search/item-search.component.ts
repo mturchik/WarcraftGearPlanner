@@ -2,14 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import {
-  BehaviorSubject,
-  ReplaySubject,
-  filter,
-  map,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, ReplaySubject, filter, switchMap, tap } from 'rxjs';
 import { ItemService } from '../shared/items/item.service';
 import { InventoryType } from '../shared/items/models/inventory-type.model';
 import { ItemClass } from '../shared/items/models/item-class.model';
@@ -17,7 +10,6 @@ import { ItemQuality } from '../shared/items/models/item-quality.model';
 import { ItemSearchParameters } from '../shared/items/models/item-search-parameters.model';
 import { ItemSubclass } from '../shared/items/models/item-subclass.model';
 import { SearchRequest } from '../shared/search.request';
-import { ItemSearchResolverData } from './item-search.resolver';
 
 @Component({
   selector: 'warcraft-gear-planner-item-search',
@@ -53,12 +45,10 @@ export class ItemSearchComponent implements OnInit {
     // Load data from resolver
     this._activatedRoute.data
       .pipe(
-        map((data) => data['itemSearch'] as ItemSearchResolverData),
-        tap((data) => {
-          console.log('🚀 ~ ItemSearchResolverData:', data);
-          this.itemClasses = data.itemClasses;
-          this.inventoryTypes = data.inventoryTypes;
-          this.itemQualities = data.itemQualities;
+        tap(({ resolverData }) => {
+          this.itemClasses = resolverData.itemClasses;
+          this.inventoryTypes = resolverData.inventoryTypes;
+          this.itemQualities = resolverData.itemQualities;
         })
       )
       .subscribe();
@@ -110,7 +100,6 @@ export class ItemSearchComponent implements OnInit {
     this.searchItems$
       .pipe(
         filter((searchRequest) => !!searchRequest),
-        tap((searchRequest) => console.log('searchRequest:', searchRequest)),
         switchMap((searchRequest) =>
           this._itemService.searchItems(searchRequest)
         ),

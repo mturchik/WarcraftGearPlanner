@@ -141,6 +141,8 @@ public class ValidateReferenceTables
 			else
 			{
 				itemClassDTO.Id = existingItemClass.Id;
+				itemClassDTO.DisplayOrder = existingItemClass.DisplayOrder;
+
 				var subclassChanges = false;
 				foreach (var itemSubclassDTO in itemSubclassDTOs)
 				{
@@ -153,17 +155,29 @@ public class ValidateReferenceTables
 					else
 					{
 						itemSubclassDTO.Id = existingItemSubclass.Id;
+						itemSubclassDTO.DisplayOrder = existingItemSubclass.DisplayOrder;
+
+						var itemSubclassItemsCount = await _apiService.Get<int>($"/items/count?itemSubclassIds={itemSubclassDTO.Id}");
+						_logger.LogInformation($"Counted {itemSubclassItemsCount} items for item subclass {itemSubclassDTO.Name}");
+						if (itemSubclassItemsCount == 0) itemSubclassDTO.DisplayOrder = -1;
 
 						if (existingItemSubclass.Name != itemSubclassDTO.Name
 							|| existingItemSubclass.VerboseName != itemSubclassDTO.VerboseName
-							|| existingItemSubclass.HideTooltip != itemSubclassDTO.HideTooltip)
+							|| existingItemSubclass.HideTooltip != itemSubclassDTO.HideTooltip
+							|| existingItemSubclass.DisplayOrder != itemSubclassDTO.DisplayOrder)
 							subclassChanges = true;
 
 						itemClassDTO.Subclasses.Add(itemSubclassDTO);
 					}
 				}
 
-				if (existingItemClass.Name != itemClassDTO.Name || subclassChanges)
+				var itemClassItemsCount = await _apiService.Get<int>($"/items/count?itemClassIds={itemClassDTO.Id}");
+				_logger.LogInformation($"Counted {itemClassItemsCount} items for item class {itemClassDTO.Name}");
+				if (itemClassItemsCount == 0) itemClassDTO.DisplayOrder = -1;
+
+				if (existingItemClass.Name != itemClassDTO.Name
+					|| existingItemClass.DisplayOrder != itemClassDTO.DisplayOrder
+					|| subclassChanges)
 				{
 					toUpdate.Add(itemClassDTO);
 				}

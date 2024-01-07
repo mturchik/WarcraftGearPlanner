@@ -13,9 +13,12 @@ public class ItemsController(IItemService itemService) : ControllerBase
 
 	[HttpGet("count")]
 	[ProducesResponseType<int>(StatusCodes.Status200OK)]
-	public async Task<ActionResult<int>> GetItemCount()
+	public async Task<ActionResult<int>> GetItemCount(
+		[FromQuery] List<Guid?> itemClassIds,
+		[FromQuery] List<Guid?> itemSubclassIds
+	)
 	{
-		var count = await itemService.GetCountAsync();
+		var count = await itemService.GetCountAsync(itemClassIds, itemSubclassIds);
 		return Ok(count);
 	}
 

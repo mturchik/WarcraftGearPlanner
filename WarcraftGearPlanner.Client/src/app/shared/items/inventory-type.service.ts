@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, of, tap } from 'rxjs';
+import { sort } from 'fast-sort';
 import { BaseService } from '../base.service';
 import { CacheService } from '../cache/cache.service';
 import { ConfigService } from '../config/config.service';
@@ -10,24 +9,28 @@ import { InventoryType } from './models/inventory-type.model';
 export class InventoryTypeService extends BaseService {
   protected _appName = 'wgp-api';
 
-  constructor(
-    http: HttpClient,
-    configService: ConfigService,
-    cacheService: CacheService
-  ) {
-    super(http, configService, cacheService);
+  constructor(configService: ConfigService, cacheService: CacheService) {
+    super(configService, cacheService);
   }
 
-  getInventoryTypes(): Observable<InventoryType[]> {
+  async getInventoryTypes() {
     const cachedValue = this.cacheService.getItem<any[]>('inventory-types');
-    if (cachedValue) return of(cachedValue);
-    return this.get<InventoryType[]>('inventory-types').pipe(
-      map((inventoryTypes) =>
-        inventoryTypes.sort((a, b) => a.name.localeCompare(b.name))
-      ),
-      tap((inventoryTypes) =>
-        this.cacheService.setItem('inventory-types', inventoryTypes)
-      )
-    );
+    if (cachedValue) return cachedValue;
+
+    let inventoryTypes = await this.get<InventoryType[]>(
+      'inventory-types'
+    ).catch((err) => {
+      console.error('Error loading inventory types: ', err);
+      return [];
+    });
+
+    inventoryTypes = inventoryTypes.filter((x) => (x.displayOrder ?? -1) >= 0);
+    inventoryTypes = sort(inventoryTypes).asc([
+      (x) => x.displayOrder ?? 0,
+      (x) => x.name,
+    ]);
+
+    this.cacheService.setItem('inventory-types', inventoryTypes);
+    return inventoryTypes;
   }
 }

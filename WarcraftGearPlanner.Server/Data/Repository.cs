@@ -57,7 +57,15 @@ public abstract class Repository<TEntity>(ApplicationDbContext context) : IRepos
 		return entity;
 	}
 
-	public virtual Task<int> GetCountAsync() => TableQuery.CountAsync();
+	public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>>? selector)
+	{
+		var query = TableQuery;
+
+		if (selector is not null) query = query.Where(selector);
+
+		var count = await query.CountAsync();
+		return count;
+	}
 
 	public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? selector)
 	{
@@ -82,7 +90,7 @@ public abstract class Repository<TEntity>(ApplicationDbContext context) : IRepos
 		query = AddOrderBy(query, searchRequest);
 		query = AddPaging(query, searchRequest);
 		query = AddIncludes(query);
-
+		var str = query.ToQueryString();
 		var entities = await query.ToListAsync();
 
 		return (entities, count);

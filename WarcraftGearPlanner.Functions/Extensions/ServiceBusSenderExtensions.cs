@@ -9,7 +9,7 @@ public static class ServiceBusSenderExtensions
 	{
 		var message = new ServiceBusMessage(JsonConvert.SerializeObject(eventData))
 		{
-			ScheduledEnqueueTime = DateTime.UtcNow.AddMinutes(3)
+			ScheduledEnqueueTime = DateTime.UtcNow.AddMinutes(1)
 		};
 		await sender.SendMessageAsync(message);
 	}
@@ -24,7 +24,7 @@ public static class ServiceBusSenderExtensions
 		{
 			var message = new ServiceBusMessage(JsonConvert.SerializeObject(e))
 			{
-				ScheduledEnqueueTime = DateTime.UtcNow.AddMinutes(3)
+				ScheduledEnqueueTime = DateTime.UtcNow.AddMinutes(2)
 			};
 			if (!messageBatch.TryAddMessage(message))
 			{

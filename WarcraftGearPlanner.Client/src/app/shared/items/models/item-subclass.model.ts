@@ -7,5 +7,6 @@ export interface ItemSubclass extends BaseModel {
   verboseName?: string;
   subclassId: number;
   hideTooltip: boolean;
+  displayOrder?: number;
   inventoryTypes: InventoryType[];
 }

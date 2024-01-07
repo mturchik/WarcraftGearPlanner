@@ -1,6 +1,5 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
-import { forkJoin, map } from 'rxjs';
 import { InventoryTypeService } from '../shared/items/inventory-type.service';
 import { ItemClassService } from '../shared/items/item-class.service';
 import { ItemQualityService } from '../shared/items/item-quality.service';
@@ -14,7 +13,7 @@ export interface ItemSearchResolverData {
   itemQualities: ItemQuality[];
 }
 
-export const itemSearchResolver: ResolveFn<ItemSearchResolverData> = (
+export const itemSearchResolver: ResolveFn<ItemSearchResolverData> = async (
   route,
   state
 ) => {
@@ -22,17 +21,14 @@ export const itemSearchResolver: ResolveFn<ItemSearchResolverData> = (
   const itemQualityService = inject(ItemQualityService);
   const inventoryTypeService = inject(InventoryTypeService);
 
-  return forkJoin([
+  const [itemClasses, inventoryTypes, itemQualities] = await Promise.all([
     itemClassService.getItemClasses(),
     inventoryTypeService.getInventoryTypes(),
     itemQualityService.getItemQualities(),
-  ]).pipe(
-    map(([itemClasses, inventoryTypes, itemQualities]) => {
-      return {
-        itemClasses,
-        inventoryTypes,
-        itemQualities,
-      };
-    })
-  );
+  ]);
+  return {
+    itemClasses,
+    inventoryTypes,
+    itemQualities,
+  };
 };

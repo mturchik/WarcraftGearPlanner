@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, of, tap } from 'rxjs';
+import { sort } from 'fast-sort';
 import { BaseService } from '../base.service';
 import { CacheService } from '../cache/cache.service';
 import { ConfigService } from '../config/config.service';
@@ -10,24 +9,38 @@ import { ItemClass } from './models/item-class.model';
 export class ItemClassService extends BaseService {
   protected _appName = 'wgp-api';
 
-  constructor(
-    http: HttpClient,
-    configService: ConfigService,
-    cacheService: CacheService
-  ) {
-    super(http, configService, cacheService);
+  constructor(configService: ConfigService, cacheService: CacheService) {
+    super(configService, cacheService);
   }
 
-  getItemClasses(): Observable<ItemClass[]> {
+  async getItemClasses() {
     const cachedValue = this.cacheService.getItem<any[]>('item-classes');
-    if (cachedValue) return of(cachedValue);
-    return this.get<ItemClass[]>('item-classes').pipe(
-      map((itemClasses) =>
-        itemClasses.sort((a, b) => a.name.localeCompare(b.name))
-      ),
-      tap((itemClasses) =>
-        this.cacheService.setItem('item-classes', itemClasses)
-      )
+    if (cachedValue) return cachedValue;
+
+    let itemClasses = await this.get<ItemClass[]>('item-classes').catch(
+      (err) => {
+        console.error('Error loading item classes: ', err);
+        return [];
+      }
     );
+
+    itemClasses = itemClasses.filter((x) => (x.displayOrder ?? -1) >= 0);
+    itemClasses = sort(itemClasses).asc([
+      (x) => x.displayOrder ?? 0,
+      (x) => x.name,
+    ]);
+
+    itemClasses.forEach((itemClass) => {
+      itemClass.subclasses = itemClass.subclasses.filter(
+        (x) => (x.displayOrder ?? -1) >= 0
+      );
+      itemClass.subclasses = sort(itemClass.subclasses).asc([
+        (x) => x.displayOrder ?? 0,
+        (x) => x.verboseName ?? x.name,
+      ]);
+    });
+
+    this.cacheService.setItem('item-classes', itemClasses);
+    return itemClasses;
   }
 }

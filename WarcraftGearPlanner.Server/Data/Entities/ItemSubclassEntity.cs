@@ -10,6 +10,7 @@ public class ItemSubclassEntity : BaseEntity
 	public string? Name { get; set; }
 	public string? VerboseName { get; set; }
 	public bool HideTooltip { get; set; }
+	public int? DisplayOrder { get; set; }
 
 	[ForeignKey(nameof(ItemClass))]
 	public Guid ItemClassId { get; set; }

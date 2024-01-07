@@ -8,6 +8,7 @@ public class ItemClassEntity : BaseEntity
 {
 	public int ClassId { get; set; }
 	public string? Name { get; set; }
+	public int? DisplayOrder { get; set; }
 
 	[InverseProperty(nameof(ItemSubclassEntity.ItemClass))]
 	public List<ItemSubclassEntity>? Subclasses { get; set; }

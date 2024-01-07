@@ -1,36 +1,38 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, switchMap } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
+import axios from 'axios';
 import { CacheService } from './cache/cache.service';
 import { ConfigService } from './config/config.service';
 
 export abstract class BaseService {
   protected abstract _appName: string;
 
-  private _baseUrl$ = this._configService.config$.pipe(
-    map((config) => config.baseUrls[this._appName])
-  );
+  private get _config() {
+    return this._configService.getConfig();
+  }
 
   constructor(
-    private _http: HttpClient,
     private _configService: ConfigService,
     protected cacheService: CacheService
   ) {}
 
-  protected get<TReturns>(route: string, params?: HttpParams) {
-    return this._baseUrl$.pipe(
-      map((baseUrl) => `${baseUrl}/api/${route}`),
-      switchMap((url) => this._http.get<TReturns>(url, { params }))
-    );
+  private async _formatUrl(route: string) {
+    const baseUrl = (await this._config).baseUrls[this._appName];
+    return `${baseUrl}/api/${route}`;
   }
 
-  protected post<TReturns, TBody>(
+  protected async get<TReturns>(route: string, params?: HttpParams) {
+    const url = await this._formatUrl(route);
+    const response = await axios.get<TReturns>(url, { params });
+    return response.data;
+  }
+
+  protected async post<TReturns, TBody>(
     route: string,
     body: TBody,
     params?: HttpParams
   ) {
-    return this._baseUrl$.pipe(
-      map((baseUrl) => `${baseUrl}/api/${route}`),
-      switchMap((url) => this._http.post<TReturns>(url, body, { params }))
-    );
+    const url = await this._formatUrl(route);
+    const response = await axios.post<TReturns>(url, body, { params });
+    return response.data;
   }
 }

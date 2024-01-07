@@ -49,4 +49,11 @@ export class CacheService {
   public removeItem(key: string) {
     this._storage.removeItem(key);
   }
+
+  /**
+   * Clear the cache.
+   */
+  public reset() {
+    this._storage.clear();
+  }
 }

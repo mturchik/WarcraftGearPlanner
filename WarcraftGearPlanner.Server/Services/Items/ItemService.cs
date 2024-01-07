@@ -23,6 +23,24 @@ public class ItemService(
 	private readonly IRepository<InventoryTypeEntity> inventoryTypeRepository = inventoryTypeRepository;
 	private readonly IRepository<ItemSubclassInventoryTypeEntity> itemSubclassInventoryTypeRepository = itemSubclassInventoryTypeRepository;
 
+	public Task<int> GetCountAsync(List<Guid?> itemClassIds, List<Guid?> itemSubclassIds)
+	{
+		itemClassIds = (itemClassIds ?? []).Where(x => x.GetValueOrDefault() != Guid.Empty).Distinct().ToList();
+		itemSubclassIds = (itemSubclassIds ?? []).Where(x => x.GetValueOrDefault() != Guid.Empty).Distinct().ToList();
+		// No filters? Get all items count.
+		if (itemClassIds.Count == 0 && itemSubclassIds.Count == 0)
+			return repository.GetCountAsync();
+		// Both filters? Filter by both.
+		else if (itemClassIds.Count > 0 && itemSubclassIds.Count > 0)
+			return repository.GetCountAsync(e => itemClassIds.Contains(e.ItemClassId) && itemSubclassIds.Contains(e.ItemSubclassId));
+		// Item class filter? Filter by item class.
+		else if (itemClassIds.Count > 0)
+			return repository.GetCountAsync(e => itemClassIds.Contains(e.ItemClassId));
+		// Item subclass filter? Filter by item subclass.
+		else
+			return repository.GetCountAsync(e => itemSubclassIds.Contains(e.ItemSubclassId));
+	}
+
 	#region Search Items
 
 	public async Task<SearchResponse<Item>?> SearchItems(SearchRequest<ItemSearchParameters> searchRequest)

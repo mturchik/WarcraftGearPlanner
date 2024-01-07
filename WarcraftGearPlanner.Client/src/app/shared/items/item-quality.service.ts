@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, of, tap } from 'rxjs';
+import { sort } from 'fast-sort';
 import { BaseService } from '../base.service';
 import { CacheService } from '../cache/cache.service';
 import { ConfigService } from '../config/config.service';
@@ -10,26 +9,29 @@ import { ItemQuality } from './models/item-quality.model';
 export class ItemQualityService extends BaseService {
   protected _appName = 'wgp-api';
 
-  constructor(
-    http: HttpClient,
-    configService: ConfigService,
-    cacheService: CacheService
-  ) {
-    super(http, configService, cacheService);
+  constructor(configService: ConfigService, cacheService: CacheService) {
+    super(configService, cacheService);
   }
 
-  getItemQualities() {
+  async getItemQualities() {
     const cachedValue =
       this.cacheService.getItem<ItemQuality[]>('item-qualities');
-    if (cachedValue) return of(cachedValue);
+    if (cachedValue) return cachedValue;
 
-    return this.get<ItemQuality[]>('item-qualities').pipe(
-      map((itemQualities) =>
-        itemQualities.sort((a, b) => a.name.localeCompare(b.name))
-      ),
-      tap((itemQualities) =>
-        this.cacheService.setItem('item-qualities', itemQualities)
-      )
+    let itemQualities = await this.get<ItemQuality[]>('item-qualities').catch(
+      (err) => {
+        console.error('Error loading item qualities: ', err);
+        return [];
+      }
     );
+
+    itemQualities = itemQualities.filter((x) => (x.displayOrder ?? -1) >= 0);
+    itemQualities = sort(itemQualities).asc([
+      (x) => x.displayOrder ?? 0,
+      (x) => x.name,
+    ]);
+
+    this.cacheService.setItem('item-qualities', itemQualities);
+    return itemQualities;
   }
 }

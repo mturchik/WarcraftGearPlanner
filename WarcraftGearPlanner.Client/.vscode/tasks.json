@@ -2,11 +2,25 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "app: start",
+      "dependsOn": ["dotnet: watch run", "npm: start"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
       "type": "npm",
       "script": "start",
       "problemMatcher": ["$eslint-compact"],
       "label": "npm: start",
       "detail": "nx serve"
+    },
+    {
+      "type": "shell",
+      "command": "dotnet watch run --project ../WarcraftGearPlanner.Server/WarcraftGearPlanner.Server.csproj",
+      "problemMatcher": ["$tsc-watch"],
+      "label": "dotnet: watch run"
     }
   ]
 }

@@ -1,0 +1,11 @@
+.form-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0;
+  margin-left: 0.5rem;
+}
+
+.form-control::placeholder {
+  font-style: italic;
+  color: var(--bs-gray-600);
+}

@@ -11,7 +11,7 @@ export const appRoutes: Route[] = [
   {
     path: 'item-search',
     component: ItemSearchComponent,
-    resolve: { itemSearch: itemSearchResolver },
+    resolve: { resolverData: itemSearchResolver },
   },
   {
     path: '**',

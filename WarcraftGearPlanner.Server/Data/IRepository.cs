@@ -12,7 +12,7 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
 	Task DeleteListAsync(List<TEntity> entities);
 	Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> selector);
 	Task<TEntity?> GetByIdAsync(Guid id);
-	Task<int> GetCountAsync();
+	Task<int> GetCountAsync(Expression<Func<TEntity, bool>>? selector = null);
 	Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? selector = null);
 	Task<(List<TEntity> entities, int count)> SearchAsync<TParameters>(SearchRequest<TParameters> searchRequest) where TParameters : class, ISearchParameters;
 	Task<TEntity> UpdateAsync(TEntity entity);

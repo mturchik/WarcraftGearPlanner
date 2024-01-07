@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseService } from '../base.service';
 import { CacheService } from '../cache/cache.service';
@@ -10,12 +9,8 @@ import { ItemSearchParameters } from './models/item-search-parameters.model';
 export class ItemService extends BaseService {
   protected _appName = 'wgp-api';
 
-  constructor(
-    http: HttpClient,
-    configService: ConfigService,
-    cacheService: CacheService
-  ) {
-    super(http, configService, cacheService);
+  constructor(configService: ConfigService, cacheService: CacheService) {
+    super(configService, cacheService);
   }
 
   getTotalItemCount() {
